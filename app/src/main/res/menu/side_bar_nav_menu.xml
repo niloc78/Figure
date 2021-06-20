@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/cook_menu_item"
+            android:title="Cook"
+            android:icon="@drawable/cook_menu_icon_unselected"/>
+        <item
+            android:id="@+id/dine_menu_item"
+            android:title="Dine"
+            android:icon="@drawable/dine_menu_icon_unselected"/>
+        <item
+            android:id="@+id/delivery_menu_item"
+            android:title="Delivery"
+            android:icon="@drawable/delivery_menu_icon_unselected"/>
+    </group>
+
+</menu>

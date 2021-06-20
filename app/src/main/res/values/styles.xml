@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="side_bar_cook_icon_style" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="android:textColor">@color/black</item>
+        <item name="iconTint">@color/black</item>
+        <item name="textAllCaps">false</item>
+        <item name="icon">@drawable/cook_side_icon_selector_style</item>
+    </style>
+
+    <style name="side_bar_dine_icon_style" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="android:textColor">@color/black</item>
+        <item name="iconTint">@color/black</item>
+        <item name="textAllCaps">false</item>
+        <item name="icon">@drawable/dine_side_icon_selector_style</item>
+    </style>
+
+    <style name="side_bar_delivery_icon_style" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="android:textColor">@color/black</item>
+        <item name="iconTint">@color/black</item>
+        <item name="textAllCaps">false</item>
+        <item name="icon">@drawable/delivery_side_icon_selector_style</item>
+    </style>
+
+    <style name="text_appearance_default" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="listSpacing" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="listPreferredItemHeightSmall">70dp</item>
+    </style>
+
+
+</resources>
