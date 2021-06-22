@@ -1,6 +1,7 @@
 package com.example.figure;
 
 import android.app.Activity;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,9 +28,8 @@ public class DashFragment extends Fragment {
     DashPagerAdapter dashPagerAdapter;
     List<DashModel> models;
     TabLayout dashDotLayout;
-    Button skip;
     View _rootView;
-    MainFragment mainFrag;
+    Button skip;
 
     @Override
     public void onAttach(Context context) {
@@ -81,8 +81,7 @@ public class DashFragment extends Fragment {
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "skip clicked", Toast.LENGTH_SHORT).show();
-                skip();
+                MainActivity.viewPager.setCurrentItem(1);
             }
         });
     }
@@ -96,15 +95,19 @@ public class DashFragment extends Fragment {
         return "dashFragment";
     }
 
-    public void skip() {
-        if (mainFrag == null) {
-            mainFrag = new MainFragment();
-        }
-        FragmentChangeListener fcListener = (FragmentChangeListener) getActivity();
-        fcListener.replaceFragment(mainFrag);
+    public Button getSkip() {
+        return this.skip;
     }
-    public MainFragment getMainFrag() {
-        return this.mainFrag;
-    }
+
+//    public void skip() {
+//        if (mainFrag == null) {
+//            mainFrag = new MainFragment();
+//        }
+//        FragmentChangeListener fcListener = (FragmentChangeListener) getActivity();
+//        fcListener.replaceFragment(mainFrag);
+//    }
+//    public MainFragment getMainFrag() {
+//        return this.mainFrag;
+//    }
 
 }

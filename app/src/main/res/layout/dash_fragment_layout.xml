@@ -19,6 +19,7 @@
             android:textColor="@color/black"
             android:textSize="60sp"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true" />
 
@@ -51,7 +52,7 @@
             android:foreground="@drawable/profile_button"
             android:background="?selectableItemBackgroundBorderless"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:layout_marginRight="10dp"
             android:layout_alignParentTop="true"/>
 

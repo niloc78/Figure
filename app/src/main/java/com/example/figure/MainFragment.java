@@ -3,7 +3,6 @@ package com.example.figure;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
+
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -34,10 +33,12 @@ public class MainFragment extends Fragment {
     Context context;
     CookFragment cookFrag;
     FragmentManager childFragmentManager;
-    FragmentContainerView modeFragContainer;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         Toast.makeText(context, "oncreate called", Toast.LENGTH_SHORT).show();
 
 
@@ -49,8 +50,6 @@ public class MainFragment extends Fragment {
             Toast.makeText(context, "onattach called", Toast.LENGTH_SHORT).show();
             this.context = (MainActivity) context;
         }
-
-
 
 
     }
@@ -82,6 +81,10 @@ public class MainFragment extends Fragment {
             FragmentTransaction transaction = childFragmentManager().beginTransaction();
             transaction.add(R.id.mode_fragment_container, cookFrag, cookFrag.toString())
                     .addToBackStack("cookFragment").commit();
+        } else {
+//            FragmentTransaction transaction = childFragmentManager().beginTransaction();
+//            transaction.add(R.id.mode_fragment_container, cookFrag, cookFrag.toString())
+//                    .addToBackStack("cookFragment").commit();
         }
 
     }
