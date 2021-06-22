@@ -1,4 +1,10 @@
 package com.example.figure;
 
-public class CookFragment {
+import androidx.fragment.app.Fragment;
+
+public class CookFragment extends Fragment {
+    public CookFragment() {
+        super(R.layout.cook_frag_layout);
+    }
+
 }

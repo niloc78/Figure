@@ -103,5 +103,8 @@ public class DashFragment extends Fragment {
         FragmentChangeListener fcListener = (FragmentChangeListener) getActivity();
         fcListener.replaceFragment(mainFrag);
     }
+    public MainFragment getMainFrag() {
+        return this.mainFrag;
+    }
 
 }
