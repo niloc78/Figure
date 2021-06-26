@@ -7,6 +7,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         style="@style/recipeCardViewStyle"
-        android:background="@color/backgroundgray"/>
+        android:background="@color/backgroundgray">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/swipe_for_recipes_text"
+            android:layout_marginTop="95dp"
+            android:layout_marginLeft="16dp"/>
+    </com.google.android.material.card.MaterialCardView>
 
 </RelativeLayout>

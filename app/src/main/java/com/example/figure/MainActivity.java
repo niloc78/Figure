@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends FragmentActivity implements FragmentChangeListener {
-    public static ViewPager viewPager;
+    public static OneDirectionViewPager viewPager;
 
     public MainActivity() {
         super(R.layout.activity_main);
@@ -34,10 +34,28 @@ public class MainActivity extends FragmentActivity implements FragmentChangeList
 //                    .setReorderingAllowed(true)
 //                    .add(R.id.fragment_container, dashFrag, dashFrag.toString())
 //                    .commit();
-            viewPager = (ViewPager) findViewById(R.id.pager);
+            viewPager = (OneDirectionViewPager) findViewById(R.id.pager);
             final MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager(), 2);
 
             viewPager.setAdapter(adapter);
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    if (position == 1) {
+                        viewPager.setAllowedSwipeDirection(SwipeDirection.NONE);
+                    }
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
 
         }
     }
@@ -61,7 +79,13 @@ public class MainActivity extends FragmentActivity implements FragmentChangeList
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
         if (count == 0) {
-            moveTaskToBack(true);
+            if (viewPager.getCurrentItem() == 0) {
+                moveTaskToBack(true);
+            } else {
+                viewPager.setCurrentItem(0);
+                viewPager.setAllowedSwipeDirection(SwipeDirection.ALL);
+            }
+
         } else {
             super.onBackPressed();
         }

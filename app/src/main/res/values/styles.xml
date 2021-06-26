@@ -45,5 +45,19 @@
         <item name="cornerSizeTopRight">59dp</item>
     </style>
 
+    <style name="ingredCardListStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/ingredCardListShapeAppearanceOverlay</item>
+        <item name="android:shadowRadius">70</item>
+        <item name="android:shadowColor">@color/black</item>
+        <item name="android:shadowDy">3</item>
+    </style>
+    <style name="ingredCardListShapeAppearanceOverlay" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">41dp</item>
+        <item name="cornerSizeTopLeft">41dp</item>
+        <item name="cornerSizeBottomLeft">41dp</item>
+        <item name="cornerSizeBottomRight">41dp</item>
+    </style>
+
 
 </resources>
