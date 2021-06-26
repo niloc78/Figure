@@ -56,17 +56,16 @@ public class MainActivity extends FragmentActivity implements FragmentChangeList
 
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        int count = getSupportFragmentManager().getBackStackEntryCount();
-//
-//
-//        if (count == 0) {
-//            moveTaskToBack(true);
-//        } else {
-//            super.onBackPressed();
-//        }
-//
-//    }
+    @Override
+    public void onBackPressed() {
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            moveTaskToBack(true);
+        } else {
+            super.onBackPressed();
+        }
+
+    }
 
 }

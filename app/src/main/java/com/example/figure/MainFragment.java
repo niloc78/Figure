@@ -3,12 +3,16 @@ package com.example.figure;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +23,7 @@ import androidx.fragment.app.Fragment;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -31,9 +36,9 @@ public class MainFragment extends Fragment {
     NavigationView sideBarFooter;
     View _rootView;
     Context context;
-    CookFragment cookFrag;
     FragmentManager childFragmentManager;
-
+    ImageButton mainSideBarIcon;
+    public static CustomViewPager modePager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,10 +82,7 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (sideBar == null && sideBarFooter == null) {
             initSideBar(view);
-            cookFrag = new CookFragment();
-            FragmentTransaction transaction = childFragmentManager().beginTransaction();
-            transaction.add(R.id.mode_fragment_container, cookFrag, cookFrag.toString())
-                    .addToBackStack("cookFragment").commit();
+            initModePager(view);
         } else {
 //            FragmentTransaction transaction = childFragmentManager().beginTransaction();
 //            transaction.add(R.id.mode_fragment_container, cookFrag, cookFrag.toString())
@@ -94,6 +96,27 @@ public class MainFragment extends Fragment {
 //        super.onDestroyView();
 //    }
 
+    public void initModePager(View view) {
+        modePager = (CustomViewPager) view.findViewById(R.id.modePager);
+        final ModePagerAdapter adapter = new ModePagerAdapter(getChildFragmentManager(), 3);
+        modePager.setAdapter(adapter);
+        modePager.setOffscreenPageLimit(2);
+        modePager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        modePager.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                return true;
+            }
+        });
+        modePager.requestDisallowInterceptTouchEvent(true);
+
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -105,6 +128,14 @@ public class MainFragment extends Fragment {
     }
 
     public void initSideBar(View view) {
+        ((DrawerLayout) view.findViewById(R.id.side_bar_drawer)).setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mainSideBarIcon = (ImageButton) view.findViewById(R.id.main_side_bar_icon);
+        mainSideBarIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((DrawerLayout) view.findViewById(R.id.side_bar_drawer)).openDrawer(Gravity.LEFT);
+            }
+        });
         sideBar = view.findViewById(R.id.side_bar_nav_view);
         sideBarFooter = view.findViewById(R.id.side_bar_nav_view_footer);
 
@@ -128,6 +159,20 @@ public class MainFragment extends Fragment {
                         sideBarFooter.getMenu().getItem(i).setChecked(false);
                     }
                     item.setChecked(!item.isChecked());
+                    switch(item.getItemId()) {
+                        case R.id.cook_menu_item:
+                            modePager.setCurrentItem(0);
+                            return true;
+                        case R.id.dine_menu_item:
+                            modePager.setCurrentItem(1);
+                            return true;
+                        case R.id.delivery_menu_item:
+                            modePager.setCurrentItem(2);
+                            return true;
+                        default:
+                            return true;
+                    }
+
                 }
                 return true;
             }

@@ -44,6 +44,7 @@ public class DashFragment extends Fragment {
         super.onCreate(savedInstanceState);
         models = new ArrayList<DashModel>();
         dashPagerAdapter = new DashPagerAdapter(models, context);
+        setRetainInstance(true);
     }
 
     @Override

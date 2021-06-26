@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/cook_orange">
+
+
+    <ImageView
+        android:src="@drawable/cook_text"
+        android:id="@+id/cooktext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"/>
+
+    <com.example.figure.CustomViewPager
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/cook_pager"
+        android:layout_below="@+id/cooktext"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="6dp"
+        android:layout_alignParentBottom="true">
+
+    </com.example.figure.CustomViewPager>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/cook_tab_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/cooktext"
+        android:layout_marginTop="25dp"
+        app:tabGravity="center"
+        app:tabIndicatorHeight="0dp"
+        app:tabPaddingEnd="70dp"
+        app:tabPaddingStart="70dp"
+        app:tabIconTint="@null"
+        app:tabIndicatorColor="@null"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/tab_divider"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:layout_below="@id/cooktext"/>
+
 
     <TextView
         android:id="@+id/atextview"

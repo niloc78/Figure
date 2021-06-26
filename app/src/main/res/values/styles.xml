@@ -29,5 +29,21 @@
         <item name="listPreferredItemHeightSmall">70dp</item>
     </style>
 
+    <style name="ingredCardViewStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/ingredCardViewShapeAppearanceOverlay</item>
+    </style>
+
+    <style name="ingredCardViewShapeAppearanceOverlay" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">59dp</item>
+    </style>
+    <style name="recipeCardViewStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/recipeCardViewShapeAppearanceOverlay</item>
+    </style>
+    <style name="recipeCardViewShapeAppearanceOverlay" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">59dp</item>
+    </style>
+
 
 </resources>

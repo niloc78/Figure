@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="backgroundgray">#F6F6F6</color>
     <color name="selected_background_gray">#EBEBEB</color>
+    <color name="cook_orange">#F9CC92</color>
+    <color name="dine_blue">#CFE1FF</color>
+    <color name="delivery_green">#CFFFDD</color>
 </resources>
