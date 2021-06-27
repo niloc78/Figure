@@ -1,14 +1,21 @@
 package com.example.figure;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
+import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
@@ -18,7 +25,9 @@ import java.util.List;
 
 public class MainActivity extends FragmentActivity implements FragmentChangeListener {
     public static OneDirectionViewPager viewPager;
-
+    Integer colorFrom;
+    Integer colorTo;
+    ValueAnimator colorAnim;
     public MainActivity() {
         super(R.layout.activity_main);
     }
@@ -27,7 +36,24 @@ public class MainActivity extends FragmentActivity implements FragmentChangeList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.backgroundgray));
+
         if (savedInstanceState == null) {
+              colorFrom = getWindow().getStatusBarColor();
+              colorTo = ContextCompat.getColor(MainActivity.this, R.color.cook_orange);
+              colorAnim = ValueAnimator.ofArgb(colorFrom, colorTo);
+              colorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                  @Override
+                  public void onAnimationUpdate(ValueAnimator animation) {
+                      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                          getWindow().setStatusBarColor((Integer) animation.getAnimatedValue());
+                      }
+                  }
+              });
+              colorAnim.setDuration(900);
+              colorAnim.setStartDelay(0);
 //            DashFragment dashFrag = new DashFragment();
 //
 //            getSupportFragmentManager().beginTransaction()
@@ -41,13 +67,36 @@ public class MainActivity extends FragmentActivity implements FragmentChangeList
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
                 }
 
                 @Override
                 public void onPageSelected(int position) {
                     if (position == 1) {
+                        if (MainFragment.modePager.getCurrentItem() == 0) {
+                            colorFrom = getWindow().getStatusBarColor();
+                            colorTo = ContextCompat.getColor(MainActivity.this, R.color.cook_orange);
+
+                            colorAnim.setIntValues(colorFrom, colorTo);
+                            colorAnim.start();
+
+                        } else if (MainFragment.modePager.getCurrentItem() == 1) {
+                            colorFrom = getWindow().getStatusBarColor();
+                            colorTo = ContextCompat.getColor(MainActivity.this, R.color.dine_blue);
+
+                            colorAnim.setIntValues(colorFrom, colorTo);
+                            colorAnim.start();
+
+                        } else if (MainFragment.modePager.getCurrentItem() == 2) {
+                            colorFrom = getWindow().getStatusBarColor();
+                            colorTo = ContextCompat.getColor(MainActivity.this, R.color.delivery_green);
+
+                            colorAnim.setIntValues(colorFrom, colorTo);
+                            colorAnim.start();
+
+                        }
+
                         viewPager.setAllowedSwipeDirection(SwipeDirection.NONE);
+
                     }
                 }
 
@@ -74,6 +123,8 @@ public class MainActivity extends FragmentActivity implements FragmentChangeList
 
     }
 
+
+
     @Override
     public void onBackPressed() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
@@ -82,6 +133,12 @@ public class MainActivity extends FragmentActivity implements FragmentChangeList
             if (viewPager.getCurrentItem() == 0) {
                 moveTaskToBack(true);
             } else {
+                colorFrom = getWindow().getStatusBarColor();
+                colorTo = ContextCompat.getColor(MainActivity.this, R.color.backgroundgray);
+
+                colorAnim.setIntValues(colorFrom, colorTo);
+                colorAnim.start();
+
                 viewPager.setCurrentItem(0);
                 viewPager.setAllowedSwipeDirection(SwipeDirection.ALL);
             }

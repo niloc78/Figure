@@ -12,4 +12,7 @@
     <color name="cook_orange">#F9CC92</color>
     <color name="dine_blue">#CFE1FF</color>
     <color name="delivery_green">#CFFFDD</color>
+    <color name="main_pink_alpha">#D7F5C4C4</color>
+    <color name="main_pink">#F5C4C4</color>
+    <color name="fabpink">#F97E7E</color>
 </resources>

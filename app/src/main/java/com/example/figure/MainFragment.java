@@ -115,6 +115,43 @@ public class MainFragment extends Fragment {
         });
         modePager.requestDisallowInterceptTouchEvent(true);
 
+        modePager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    ((MainActivity)context).colorFrom = ((MainActivity)context).getWindow().getStatusBarColor();
+                    ((MainActivity)context).colorTo = ContextCompat.getColor(context, R.color.cook_orange);
+
+                    ((MainActivity)context).colorAnim.setIntValues(((MainActivity)context).colorFrom, ((MainActivity)context).colorTo);
+                    ((MainActivity)context).colorAnim.start();
+                } else if (position == 1) {
+                    ((MainActivity)context).colorFrom = ((MainActivity)context).getWindow().getStatusBarColor();
+                    ((MainActivity)context).colorTo = ContextCompat.getColor(context, R.color.dine_blue);
+
+                    ((MainActivity)context).colorAnim.setIntValues(((MainActivity)context).colorFrom, ((MainActivity)context).colorTo);
+                    ((MainActivity)context).colorAnim.start();
+
+                } else if (position == 2) {
+                    ((MainActivity)context).colorFrom = ((MainActivity)context).getWindow().getStatusBarColor();
+                    ((MainActivity)context).colorTo = ContextCompat.getColor(context, R.color.delivery_green);
+
+                    ((MainActivity)context).colorAnim.setIntValues(((MainActivity)context).colorFrom, ((MainActivity)context).colorTo);
+                    ((MainActivity)context).colorAnim.start();
+
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
     }
 
     @Override
