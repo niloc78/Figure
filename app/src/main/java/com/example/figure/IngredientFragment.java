@@ -2,20 +2,38 @@ package com.example.figure;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.os.Bundle;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class IngredientFragment extends Fragment implements AddIngredientDialog.AddIngredientDialogListener {
     Context context;
     View _rootView;
     FloatingActionButton addIngredientButton;
+    RecyclerView ingredRecyclerView;
+    RecyclerView.LayoutManager mIngredLayoutManager;
+    ArrayList<String> ingredData;
+    IngredientRecyclerAdapter mIngredAdapter;
+    ItemTouchHelper itemTouchHelper;
 //    public IngredientFragment() {
 //        super(R.layout.ingred_frag_layout);
 //    }
@@ -52,7 +70,65 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
                     openIngredientDialog();
                 }
             });
+
+            initRecyclerView(view);
         }
+    }
+
+    public void initRecyclerView(View view) {
+        ingredData = new ArrayList<String>();
+
+        ingredRecyclerView = (RecyclerView) view.findViewById(R.id.ingred_recycler_view);
+        mIngredLayoutManager = new LinearLayoutManager(context);
+        ingredRecyclerView.setLayoutManager(mIngredLayoutManager);
+        mIngredAdapter = new IngredientRecyclerAdapter(ingredData);
+        ingredRecyclerView.setAdapter(mIngredAdapter);
+        ingredRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                Toast.makeText(context, "on Moved ", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                Toast.makeText(context, "on Swiped ", Toast.LENGTH_SHORT).show();
+                //Remove swiped item from list and notify the RecyclerView
+                int position = viewHolder.getAdapterPosition();
+                ingredData.remove(position);
+                mIngredAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                        .addSwipeLeftBackgroundColor(ContextCompat.getColor(context, R.color.black))
+                        .create()
+                        .decorate();
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+
+
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                final int dragFlags = ItemTouchHelper.LEFT;
+                final int swipeFlags = ItemTouchHelper.LEFT;
+                return makeMovementFlags(dragFlags, swipeFlags);
+            }
+
+
+        };
+
+        itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+
+        itemTouchHelper.attachToRecyclerView(ingredRecyclerView);
+
     }
 
     @Override
@@ -74,6 +150,17 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
 
     @Override
     public void addIngredient(String ingred) {
+
+        if (ingredData.size() == 1) {
+
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((IngredientRecyclerAdapter.ViewHolder) ingredRecyclerView.findViewHolderForAdapterPosition(0)).getIngredTextView().getLayoutParams();
+            params.topMargin = params.topMargin + 20;
+            ((IngredientRecyclerAdapter.ViewHolder) ingredRecyclerView.findViewHolderForAdapterPosition(0)).getIngredTextView().setLayoutParams(params);
+            mIngredAdapter.notifyDataSetChanged();
+        }
+        ingredData.add(ingred);
+        mIngredAdapter.notifyDataSetChanged();
+
 
     }
 

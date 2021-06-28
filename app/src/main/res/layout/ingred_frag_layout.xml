@@ -41,6 +41,14 @@
                 app:cardElevation="4dp"
                 android:layout_below="@id/enter_your_ingreds_text"
                 style="@style/ingredCardListStyle">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/ingred_recycler_view"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/add_ingred_button"
                     android:layout_width="80dp"
