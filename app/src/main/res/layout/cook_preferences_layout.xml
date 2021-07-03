@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardPreventCornerOverlap="false"
+        app:cardBackgroundColor="@android:color/transparent"
+        android:backgroundTint="@null"
+        android:background="@null"
+        app:cardElevation="4dp"
+        style="@style/cookPrefCardStyle">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="15dp"
+            android:clipToPadding="true"
+            android:background="@drawable/cook_pref_background_gradient">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/filter_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/filter_text"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="18dp"/>
+            <ImageButton
+                android:id="@+id/cook_pref_back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/pref_back_icon"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="18dp"
+                android:layout_marginLeft="20dp"/>
+            <ImageView
+                android:id="@+id/which_meal_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/which_meal_type"
+                android:layout_below="@id/filter_text"
+                android:layout_marginLeft="28dp"
+                android:layout_marginTop="15dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/meal_type_recycler_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/which_meal_type"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="25dp"/>
+
+            <ImageView
+                android:id="@+id/cook_pref_divider_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/meal_type_recycler_view"
+                android:src="@drawable/cook_pref_divider"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="23dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/which_specific_cuisine"
+                android:src="@drawable/which_specific_cuisine"
+                android:layout_below="@id/cook_pref_divider_1"
+                android:layout_marginLeft="28dp"
+                android:layout_marginTop="13dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/cuisine_type_recycler_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/which_specific_cuisine"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="25dp"/>
+
+            <ImageView
+                android:id="@+id/cook_pref_divider_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cuisine_type_recycler_view"
+                android:src="@drawable/cook_pref_divider"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="28dp"/>
+            
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="214dp"
+                android:layout_height="45dp"
+                android:layout_below="@id/cook_pref_divider_2"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="13dp"
+                android:layout_marginTop="26dp"
+                app:cardElevation="4dp"
+                android:padding="1dp"
+                app:strokeColor="@color/bordergrey"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardPreventCornerOverlap="false">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Filters"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="21sp"
+                    android:fontFamily="@font/josefinsans"
+                    android:textColor="#585757"/>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+
+        </RelativeLayout>
+
+        </ScrollView>
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+</RelativeLayout>

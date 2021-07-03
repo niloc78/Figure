@@ -25,6 +25,7 @@
 
     </com.example.figure.CustomViewPager>
 
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/cook_tab_layout"
         android:layout_width="wrap_content"
@@ -48,6 +49,36 @@
         android:layout_marginTop="12dp"
         android:layout_below="@id/cooktext"/>
 
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coord_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="2dp">
+
+
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/cook_pref_view"
+            android:layout_width="match_parent"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@null"
+            android:layout_height="wrap_content"
+            android:elevation="6dp"
+            app:layout_behavior="@string/bottom_sheet_behavior"
+            app:behavior_hideable="true">
+
+            <FrameLayout
+                android:id="@+id/cook_pref_container"
+                android:background="@null"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
 </RelativeLayout>

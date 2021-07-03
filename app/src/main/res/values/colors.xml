@@ -15,4 +15,6 @@
     <color name="main_pink_alpha">#D7F5C4C4</color>
     <color name="main_pink">#F5C4C4</color>
     <color name="fabpink">#F97E7E</color>
+    <color name="winered">#C10000</color>
+    <color name="bordergrey">#707070</color>
 </resources>

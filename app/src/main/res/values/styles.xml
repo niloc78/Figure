@@ -37,6 +37,17 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">59dp</item>
     </style>
+
+    <style name="dineCardViewStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/dineCardViewShapeAppearanceOverlay</item>
+    </style>
+
+    <style name="dineCardViewShapeAppearanceOverlay" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">59dp</item>
+        <item name="cornerSizeTopRight">59dp</item>
+    </style>
+
     <style name="recipeCardViewStyle" parent="Widget.MaterialComponents.CardView">
         <item name="shapeAppearanceOverlay">@style/recipeCardViewShapeAppearanceOverlay</item>
     </style>
@@ -59,5 +70,33 @@
         <item name="cornerSizeBottomRight">41dp</item>
     </style>
 
+    <style name="cookPrefCardStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/cookPrefCardShapeAppearanceOverlay</item>
+    </style>
+    <style name="cookPrefCardShapeAppearanceOverlay" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">28dp</item>
+        <item name="cornerSizeTopLeft">28dp</item>
+    </style>
+
+    <style name="prefItemStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/prefItemShapeAppearanceOverlay</item>
+    </style>
+    <style name="prefItemShapeAppearanceOverlay" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">11dp</item>
+        <item name="cornerSizeTopLeft">11dp</item>
+        <item name="cornerSizeBottomRight">11dp</item>
+        <item name="cornerSizeBottomLeft">11dp</item>
+    </style>
+
+    <style name="cookPrefBackStyle" parent="">
+        <item name="shapeAppearanceOverlay">@style/cookPrefBackShapeAppearanceOverlay</item>
+    </style>
+    <style name="cookPrefBackShapeAppearanceOverlay" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">33dp</item>
+        <item name="cornerSizeTopLeft">33dp</item>
+    </style>
 
 </resources>

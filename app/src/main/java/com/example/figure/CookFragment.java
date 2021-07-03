@@ -3,18 +3,24 @@ package com.example.figure;
 import android.app.Activity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.tabs.TabLayout;
 
 public class CookFragment extends Fragment {
@@ -23,6 +29,8 @@ public class CookFragment extends Fragment {
     Context context;
     public static CustomViewPager cookPager;
     TabLayout cookTabLayout;
+
+    BottomSheetBehavior sheetBehavior;
 
 //    public CookFragment() {
 //        super(R.layout.cook_frag_layout);
@@ -60,6 +68,7 @@ public class CookFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (cookPager == null) {
             initCookPager(view);
+            initCookPref(view);
         }
     }
 
@@ -106,6 +115,33 @@ public class CookFragment extends Fragment {
         super.onDetach();
         this.context = null;
     }
+
+    public void initCookPref(View view) {
+        FragmentManager fm = getChildFragmentManager();
+        FragmentTransaction trans = fm.beginTransaction();
+        trans.add(R.id.cook_pref_container, new CookPreferencesFragment(), "cookPreferencesFragment");
+        trans.commit();
+
+        sheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.cook_pref_view));
+
+        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        sheetBehavior.setDraggable(false);
+
+
+
+//
+//        ((ImageButton) view.findViewById(R.id.cook_pref_button)).bringToFront();
+//        ((ImageButton) view.findViewById(R.id.cook_pref_button)).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//                scrim.setClickable(true);
+//                scrim.setBackgroundColor(ContextCompat.getColor(context, R.color.main_pink_alpha));
+//            }
+//        });
+    }
+
     @Override
     public String toString () {
         return "cookFragment";

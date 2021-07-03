@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="7dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/pref_item_card"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/bordergrey"
+        app:cardBackgroundColor="@color/white"
+        app:cardPreventCornerOverlap="false"
+        android:backgroundTint="@null"
+        android:padding="1dp"
+        android:layout_centerInParent="true"
+        style="@style/prefItemStyle">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_centerHorizontal="true"
+                android:id="@+id/pref_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/josefinsans"
+                android:textSize="15sp"
+                android:textColor="@color/black"/>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/pref_item_image"
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:layout_below="@id/pref_item_name"
+                android:src="@color/black" />
+
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+
+
+</RelativeLayout>

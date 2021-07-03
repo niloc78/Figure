@@ -3,22 +3,29 @@ package com.example.figure;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -72,6 +79,19 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
             });
 
             initRecyclerView(view);
+
+        ((ImageButton) view.findViewById(R.id.cook_pref_button)).bringToFront();
+        ((ImageButton) view.findViewById(R.id.cook_pref_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((CookFragment) getParentFragment()).sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                ((MainFragment) getParentFragment().getParentFragment()).mainSideBarIcon.setVisibility(View.GONE);
+//                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//                scrim.setClickable(true);
+//                scrim.setBackgroundColor(ContextCompat.getColor(context, R.color.main_pink_alpha));
+            }
+        });
+
         }
     }
 
