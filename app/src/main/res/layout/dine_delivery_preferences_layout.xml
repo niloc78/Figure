@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardPreventCornerOverlap="false"
+        app:cardBackgroundColor="@android:color/transparent"
+        android:backgroundTint="@null"
+        android:background="@null"
+        app:cardElevation="4dp"
+        style="@style/cookPrefCardStyle">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:overScrollMode="always"
+            android:layout_height="match_parent"
+            android:paddingBottom="15dp"
+            android:clipToPadding="true"
+            android:background="@drawable/cook_pref_background_gradient">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/preferences_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Preferences"
+                    android:textAppearance="@style/josefinsansTextAppearance"
+                    android:textSize="21sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="18dp"
+                    android:textColor="@color/black"/>
+
+                <ImageButton
+                android:id="@+id/dine_delivery_pref_back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/pref_back_icon"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="18dp"
+                android:layout_marginLeft="20dp"/>
+                
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/location_search_bar_card_view"
+                    android:layout_width="349dp"
+                    android:layout_height="60dp"
+                    android:layout_below="@id/preferences_text"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="12dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="3dp"
+                    android:padding="1dp"
+                    app:strokeColor="@color/bordergrey"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageButton
+                            android:id="@+id/location_search_bar_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/search_location_icon"
+                            android:backgroundTint="@android:color/transparent"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="14dp"
+                            android:layout_alignParentLeft="true"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/location_search_bar_divider"
+                            android:layout_toRightOf="@id/location_search_bar_button"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="11dp"/>
+                    </RelativeLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/searching_up_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/location_search_bar_card_view"
+                    android:text="Searching up to "
+                    android:textSize="21sp"
+                    android:textColor="#585757"
+                    android:layout_marginLeft="28dp"
+                    android:layout_marginTop="23dp"
+                    android:textAppearance="@style/josefinsansTextAppearance"/>
+                <TextView
+                    android:id="@+id/mile_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/searching_up_to"
+                    android:text="5.2"
+                    android:layout_below="@id/location_search_bar_card_view"
+                    android:textSize="35sp"
+                    android:textAppearance="@style/josefinsansTextAppearance"
+                    android:labelFor="@id/radius_slider"
+                    android:layout_marginTop="9dp"
+                    android:textColor="#F97E7E"/>
+                <TextView
+                    android:id="@+id/miles_away"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" miles away"
+                    android:textSize="21sp"
+                    android:layout_toRightOf="@id/mile_num"
+                    android:layout_below="@id/location_search_bar_card_view"
+                    android:layout_marginTop="23dp"
+                    android:textAppearance="@style/josefinsansTextAppearance"
+                    android:textColor="#585757"/>
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/radius_slider"
+                    android:layout_width="349dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:valueFrom="1.0"
+                    android:valueTo="20.0"
+                    app:tickColor="@android:color/transparent"
+                    app:trackColor="#585757"
+                    app:trackHeight="7dp"
+                    android:stepSize="0.1"
+                    android:layout_centerHorizontal="true"
+                    android:value="5.2"
+                    app:labelBehavior="gone"
+                    android:layout_below="@id/searching_up_to"
+                    android:layout_marginTop="5dp"
+                    android:alpha="1"
+                    app:thumbStrokeWidth="1dp"
+                    app:thumbColor="#F97E7E"
+                    app:thumbStrokeColor="@color/backgroundgray"
+                    style="@style/sliderStyle"/>
+
+                <ImageView
+                    android:id="@+id/dine_delivery_pref_divider_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cook_pref_divider"
+                    android:layout_below="@id/radius_slider"
+                    android:layout_marginTop="15dp"
+                    android:layout_centerHorizontal="true"/>
+
+                <TextView
+                    android:id="@+id/restaurant_prices"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/josefinsansTextAppearance"
+                    android:textSize="21sp"
+                    android:textColor="#585757"
+                    android:text="Restaurant prices"
+                    android:layout_below="@id/dine_delivery_pref_divider_1"
+                    android:layout_marginLeft="28dp"
+                    android:layout_marginTop="20dp" />
+
+
+                <RadioGroup
+                    android:id="@+id/price_radio_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/restaurant_prices"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
+                    android:weightSum="2"
+                    android:layout_marginLeft="28dp">
+
+                        <com.example.figure.CustomRadioGroup
+                            android:id="@+id/rad1"
+                            android:text="$"
+                            android:layoutDirection="rtl"
+                            android:gravity="center"
+                            android:textSize="25sp"
+                            android:textColor="#585757"
+                            android:layout_width="wrap_content"
+                            android:buttonTint="#FC7E7E"
+                            android:layout_height="wrap_content"/>
+                        <com.example.figure.CustomRadioGroup
+                            android:id="@+id/rad2"
+                            android:text="$$"
+                            android:layoutDirection="rtl"
+                            android:textSize="25sp"
+                            android:gravity="center|right"
+                            android:textColor="#585757"
+                            android:layout_weight="1"
+                            android:buttonTint="#FC7E7E"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <com.example.figure.CustomRadioGroup
+                            android:id="@+id/rad3"
+                            android:text="$$$"
+                            android:layoutDirection="rtl"
+                            android:layout_weight="1"
+                            android:textSize="25sp"
+                            android:gravity="center|right"
+                            android:buttonTint="#FC7E7E"
+                            android:textColor="#585757"
+                            android:layout_marginRight="20dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+
+
+
+                </RadioGroup>
+
+                <ImageView
+                    android:id="@+id/dine_delivery_pref_divider_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cook_pref_divider"
+                    android:layout_below="@id/price_radio_group"
+                    android:layout_marginTop="22dp"
+                    android:layout_centerHorizontal="true"/>
+
+                <ImageView
+                    android:id="@+id/search_for_a_specific_cuisine"
+                    android:focusableInTouchMode="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/search_for_a_specific_cuisine"
+                    android:layout_below="@id/dine_delivery_pref_divider_2"
+                    android:layout_marginLeft="28dp"
+                    android:layout_marginTop="14dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/dine_delivery_pref_cuisine_type_recycler_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/search_for_a_specific_cuisine"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="25dp"/>
+
+                <ImageView
+                    android:id="@+id/dine_delivery_pref_divider_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cook_pref_divider"
+                    android:layout_below="@id/dine_delivery_pref_cuisine_type_recycler_view"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"/>
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/update_preferences_card_view"
+                    android:layout_width="214dp"
+                    android:layout_height= "45dp"
+                    android:layout_below="@id/dine_delivery_pref_divider_3"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="27dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardCornerRadius="13dp"
+                    app:cardElevation="3dp"
+                    android:padding="1dp"
+                    app:strokeColor="@color/bordergrey"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <TextView
+                        android:id="@+id/update_preferences"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Update Preferences"
+                        android:layout_gravity="center"
+                        android:textSize="21sp"/>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/update_preferences_card_view"/>
+
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</RelativeLayout>

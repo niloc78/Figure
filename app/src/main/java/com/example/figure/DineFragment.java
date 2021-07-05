@@ -13,6 +13,10 @@ import android.widget.Button;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 public class DineFragment extends Fragment {
     Context context;
@@ -21,6 +25,7 @@ public class DineFragment extends Fragment {
     Integer colorFrom;
     Integer colorTo;
     ValueAnimator colorAnim;
+    BottomSheetBehavior sheetBehavior;
 
     //    public IngredientFragment() {
 //        super(R.layout.ingred_frag_layout);
@@ -52,6 +57,7 @@ public class DineFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (prefButton == null) {
             initPrefButton(view);
+            initDinePref(view);
 
         }
     }
@@ -86,5 +92,37 @@ public class DineFragment extends Fragment {
         colorAnim.setRepeatMode(ValueAnimator.REVERSE);
         colorAnim.start();
 
+        prefButton.setOnClickListener(v -> {
+            sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            ((MainFragment) getParentFragment()).mainSideBarIcon.setVisibility(View.GONE);
+        });
+
     }
+
+    public void initDinePref(View view) {
+        FragmentManager fm = getChildFragmentManager();
+        FragmentTransaction trans = fm.beginTransaction();
+        trans.add(R.id.dine_pref_container, new DineDeliveryPreferencesFragment(), "dinePreferencesFragment");
+        trans.commit();
+
+        sheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.dine_pref_view));
+
+        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        sheetBehavior.setDraggable(false);
+
+
+
+//
+//        ((ImageButton) view.findViewById(R.id.cook_pref_button)).bringToFront();
+//        ((ImageButton) view.findViewById(R.id.cook_pref_button)).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//                scrim.setClickable(true);
+//                scrim.setBackgroundColor(ContextCompat.getColor(context, R.color.main_pink_alpha));
+//            }
+//        });
+    }
+
 }

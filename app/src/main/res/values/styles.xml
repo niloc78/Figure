@@ -98,5 +98,13 @@
         <item name="cornerSizeTopRight">33dp</item>
         <item name="cornerSizeTopLeft">33dp</item>
     </style>
+    
+    <style name="sliderStyle" parent="Widget.MaterialComponents.Slider">
+    </style>
+
+    <style name="josefinsansTextAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="fontFamily">@font/josefinsans</item>
+        <item name="android:fontFamily">@font/josefinsans</item>
+    </style>
 
 </resources>

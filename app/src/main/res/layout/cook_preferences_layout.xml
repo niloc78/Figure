@@ -19,6 +19,7 @@
             android:layout_height="match_parent"
             android:paddingBottom="15dp"
             android:clipToPadding="true"
+            android:overScrollMode="always"
             android:background="@drawable/cook_pref_background_gradient">
 
 

@@ -54,6 +54,7 @@ public class PreferenceRecyclerAdapter extends RecyclerView.Adapter<PreferenceRe
         String[] keys = data.keySet().toArray(new String[data.size()]);
 
         ShapeableImageView imageView = holder.getPrefItemImage();
+        MaterialCardView prefItemCardView = holder.getPrefItemCardView();
 
         holder.getPrefItemName().setText(keys[position]);
         holder.getPrefItemName().setTypeface(face);
@@ -64,9 +65,12 @@ public class PreferenceRecyclerAdapter extends RecyclerView.Adapter<PreferenceRe
         if (selectedposition == position) {
             holder.itemView.setSelected(true);
             imageView.clearColorFilter();
+            prefItemCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.cardbackgray));
+
         } else {
             holder.itemView.setSelected(false);
             imageView.setColorFilter(filter);
+            prefItemCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
         }
 
         holder.itemView.setOnClickListener(v -> {
