@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,8 +62,10 @@ public class DineDeliveryPreferencesFragment extends Fragment {
             _rootView = inflater.inflate(R.layout.dine_delivery_preferences_layout, container, false);
             if (getParentFragment() instanceof DineFragment) {
                 mode = "Dine";
+                Log.d(mode + " preferences created", "created");
             } else if (getParentFragment() instanceof DeliveryFragment) {
                 mode = "Delivery";
+                Log.d(mode + " preferences created", "created");
             }
 
         }
@@ -74,14 +77,22 @@ public class DineDeliveryPreferencesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (cuisineTypeRecyclerView == null) {
             ImageButton backButton = (ImageButton) view.findViewById(R.id.dine_delivery_pref_back_button);
-            backButton.setOnClickListener(v -> {
-                ((DineFragment) getParentFragment()).sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                ((MainFragment) getParentFragment().getParentFragment()).mainSideBarIcon.setVisibility(View.VISIBLE);
-            });
+
+            if (mode.equalsIgnoreCase("Dine")) {
+                backButton.setOnClickListener(v -> {
+                    ((DineFragment) getParentFragment()).sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    ((MainFragment) getParentFragment().getParentFragment()).mainSideBarIcon.setVisibility(View.VISIBLE);
+                });
+            } else if (mode.equalsIgnoreCase("Delivery")) {
+                backButton.setOnClickListener(v -> {
+                    ((DeliveryFragment) getParentFragment()).sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    ((MainFragment) getParentFragment().getParentFragment()).mainSideBarIcon.setVisibility(View.VISIBLE);
+                });
+            }
+
 
             initViewsAndButtons(view);
             initRecyclerViews(view);
-            ScrollView x;
 
 
         }
@@ -151,6 +162,10 @@ public class DineDeliveryPreferencesFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         this.context = null;
+    }
+
+    public String getMode() {
+        return mode;
     }
 
     @Override
