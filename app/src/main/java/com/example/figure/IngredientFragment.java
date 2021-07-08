@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +21,17 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.VolleyError;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -41,6 +46,10 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
     ArrayList<String> ingredData;
     IngredientRecyclerAdapter mIngredAdapter;
     ItemTouchHelper itemTouchHelper;
+    RecipeModel recipeModel;
+    String recipe_api_id = BuildConfig.EDAMAM_ID;
+    String recipe_api_key = BuildConfig.EDAMAM_KEY;
+    GetUrlContent mGetUrlContent;
 //    public IngredientFragment() {
 //        super(R.layout.ingred_frag_layout);
 //    }
@@ -71,6 +80,7 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
         super.onViewCreated(view, savedInstanceState);
         if (addIngredientButton == null) {
             addIngredientButton = view.findViewById(R.id.add_ingred_button);
+            recipeModel = new ViewModelProvider(requireActivity()).get(RecipeModel.class);
             addIngredientButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -92,7 +102,40 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
             }
         });
 
+        mGetUrlContent = new GetUrlContent(constrIResultCallback(), context);
+
         }
+    }
+
+    public IResult constrIResultCallback() {
+        return new IResult() {
+            @Override
+            public void notifySuccess(String requestType, JSONObject response) {
+                Log.d("Recipe api response", response.toString());;
+                //recipeModel = new ViewModelProvider(requireActivity()).get(RecipeModel.class);
+                recipeModel.setResponse(response.toString());
+                //pass ingreds to model?
+                //test gson map
+                recipeModel.setIngredients(ingredData.toArray(new String[ingredData.size()]));
+                //recipeModel.sort();
+                //pass to viewmodel here
+                Bundle result = new Bundle();
+                result.putBoolean("loaded", true);
+                getParentFragmentManager().setFragmentResult("recipesLoaded", result);
+
+
+            }
+
+            @Override
+            public void notifyError(String requestType, VolleyError error) {
+                Log.d("Recipe callback error", "Error");
+            }
+
+            @Override
+            public void notifySuccess(String requestType, JSONObject response, String errand) {
+
+            }
+        };
     }
 
     public void initRecyclerView(View view) {
@@ -122,6 +165,13 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
                 int position = viewHolder.getAdapterPosition();
                 ingredData.remove(position);
                 mIngredAdapter.notifyDataSetChanged();
+                if (isMetIngredientMin()) {
+                    getRecipeUrlContent(ingredData);
+                } else {
+                    Bundle result = new Bundle();
+                    result.putBoolean("loaded", false);
+                    getParentFragmentManager().setFragmentResult("recipesLoaded", result);
+                }
 
             }
 
@@ -172,7 +222,6 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
     public void addIngredient(String ingred) {
 
         if (ingredData.size() == 1) {
-
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((IngredientRecyclerAdapter.ViewHolder) ingredRecyclerView.findViewHolderForAdapterPosition(0)).getIngredTextView().getLayoutParams();
             params.topMargin = params.topMargin + 20;
             ((IngredientRecyclerAdapter.ViewHolder) ingredRecyclerView.findViewHolderForAdapterPosition(0)).getIngredTextView().setLayoutParams(params);
@@ -180,8 +229,48 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
         }
         ingredData.add(ingred);
         mIngredAdapter.notifyDataSetChanged();
+        if (isMetIngredientMin()) {
+            getRecipeUrlContent(ingredData);
+        }
+    }
 
+    public void getRecipeUrlContent(ArrayList<String> ingredients) {
+        String url = "https://api.edamam.com/api/recipes/v2?type=public";
+        String app_id = "&app_id=" + recipe_api_id;
+        String app_key = "&app_key=" + recipe_api_key;
+        String ingrs = "&q=";
+        String imgSize = "&imageSize=LARGE";
+        int ingrMin = (int) Math.log(ingredients.size());
+        int ingrMax = ingrMax(ingredients.size());
+        String ingrRange = "&ingr=" + ingrMin + "-" + ingrMax;
+        for (int i = 0; i <= ingredients.size() - 1; i++) {
+            if (i == ingredients.size() - 1) {
+                ingrs += ingredients.get(i);
+                break;
+            }
+            ingrs += ingredients.get(i) + "%20";
+        }
+        url += ingrs + app_id
+                 + app_key + ingrRange + imgSize;
+        Log.d("request url", url);
+        mGetUrlContent.getDataVolley("GETCALL", url);
+    }
+    public void getRecipeUrlContent(ArrayList<String> ingredients, String mealOrCuisineType) {
 
+    }
+    public void getRecipeUrlContent(ArrayList<String> ingredients, String mealType, String cuisineType) {
+
+    }
+
+    public int ingrMax(int ingrNum) {
+        int diff = (int) Math.log(ingrNum);
+        return ingrNum + (ingrNum - diff);
+    }
+
+    
+
+    public boolean isMetIngredientMin() {
+        return ingredData.size() >= 3;
     }
 
 

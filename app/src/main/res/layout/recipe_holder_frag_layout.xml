@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@null">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/recipeCardViewStyle"
+        app:cardPreventCornerOverlap="false"
+        app:cardBackgroundColor="@color/backgroundgray">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/swipe_for_recipes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/swipe_for_recipes_text"
+                android:layout_marginTop="95dp"
+                android:layout_marginLeft="16dp"/>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/recipe_tabs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/swipe_for_recipes"
+                android:layout_centerHorizontal="true"
+                android:background="@null"
+                app:tabBackground="@drawable/dash_tab_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"/>
+
+            <androidx.viewpager2.widget.ViewPager2
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/recipe_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/recipe_tabs"/>
+
+
+        </RelativeLayout>
+
+
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+</RelativeLayout>

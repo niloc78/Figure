@@ -171,6 +171,7 @@
                     android:layout_below="@id/restaurant_prices"
                     android:orientation="horizontal"
                     android:layout_marginTop="16dp"
+                    android:gravity="center"
                     android:weightSum="2"
                     android:layout_marginLeft="28dp">
 
@@ -178,7 +179,7 @@
                             android:id="@+id/rad1"
                             android:text="$"
                             android:layoutDirection="rtl"
-                            android:gravity="center"
+                            android:gravity="center|right"
                             android:textSize="25sp"
                             android:textColor="#585757"
                             android:layout_width="wrap_content"

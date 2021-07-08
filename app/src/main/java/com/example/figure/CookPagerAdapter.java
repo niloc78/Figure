@@ -22,8 +22,8 @@ public class CookPagerAdapter extends FragmentStatePagerAdapter {
                 IngredientFragment ingredFragment = new IngredientFragment();
                 return ingredFragment;
             case 1:
-                RecipeFragment recipeFrag = new RecipeFragment();
-                return recipeFrag;
+                RecipeHolderFragment recipeHolderFrag = new RecipeHolderFragment();
+                return recipeHolderFrag;
             default:
                 return null;
         }

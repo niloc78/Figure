@@ -6,17 +6,47 @@
     android:background="@null">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/recipe_image_card"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="@style/recipeCardViewStyle"
-        app:cardBackgroundColor="@color/backgroundgray">
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        app:cardPreventCornerOverlap="false"
+        app:cardElevation="5dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/swipe_for_recipes_text"
-            android:layout_marginTop="95dp"
-            android:layout_marginLeft="16dp"/>
+            android:id="@+id/recipe_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="false"
+            android:scaleType="fitXY"/>
     </com.google.android.material.card.MaterialCardView>
+    
+    <TextView
+        android:id="@+id/recipe_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recipe_image_card"
+        android:layout_centerHorizontal="true"
+        android:textSize="28sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="18dp"/>
+
+    <ImageView
+        android:id="@+id/recipe_nutrition_divider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recipe_name"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/recipe_nutrition_divider"
+        android:layout_marginTop="14dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recipe_nutrition_recycler_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recipe_nutrition_divider"
+        android:layout_marginLeft="9dp"/>
+
+
 
 </RelativeLayout>
