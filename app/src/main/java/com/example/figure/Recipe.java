@@ -18,9 +18,6 @@ public class Recipe {
     private String imageUrl;
     float calories;
     private HashMap<String, Object> totalNutrients;
-
-
-
     private String url;
 
     public HashMap<String, Object> getTotalNutrients() {

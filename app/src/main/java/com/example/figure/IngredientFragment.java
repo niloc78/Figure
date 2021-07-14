@@ -50,9 +50,7 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
     String recipe_api_id = BuildConfig.EDAMAM_ID;
     String recipe_api_key = BuildConfig.EDAMAM_KEY;
     GetUrlContent mGetUrlContent;
-//    public IngredientFragment() {
-//        super(R.layout.ingred_frag_layout);
-//    }
+
     @Override
     public void onCreate(Bundle savedInstancestate) {
         super.onCreate(savedInstancestate);
@@ -230,7 +228,18 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
         ingredData.add(ingred);
         mIngredAdapter.notifyDataSetChanged();
         if (isMetIngredientMin()) {
-            getRecipeUrlContent(ingredData);
+            CookPreferencesFragment frag = (CookPreferencesFragment) getParentFragmentManager().findFragmentById(R.id.cook_pref_container);
+            if ((frag.mealTypeAdapter.getSelectedPos() == -1) && (frag.cuisineTypeAdapter.getSelectedPos() == -1)) {
+                getRecipeUrlContent(ingredData);
+            } else if ((frag.mealTypeAdapter.getSelectedPos() != -1) && (frag.cuisineTypeAdapter.getSelectedPos() != -1)) {
+                getRecipeUrlContent(ingredData, frag.mealTypeAdapter.getSelectedText(), frag.cuisineTypeAdapter.getSelectedText());
+            } else {
+                if (frag.mealTypeAdapter.getSelectedPos() != -1) {
+                    getRecipeUrlContent(ingredData, frag.mealTypeAdapter.getSelectedText(), 1);
+                } else {
+                    getRecipeUrlContent(ingredData, frag.cuisineTypeAdapter.getSelectedText(), 2);
+                }
+            }
         }
     }
 
@@ -255,19 +264,70 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
         Log.d("request url", url);
         mGetUrlContent.getDataVolley("GETCALL", url);
     }
-    public void getRecipeUrlContent(ArrayList<String> ingredients, String mealOrCuisineType) {
+    public void getRecipeUrlContent(ArrayList<String> ingredients, String mealOrCuisineType, int t) { // 1 for meal , 2 for cuisine
+        String url = "https://api.edamam.com/api/recipes/v2?type=public";
+        String app_id = "&app_id=" + recipe_api_id;
+        String app_key = "&app_key=" + recipe_api_key;
+        String ingrs = "&q=";
+        String imgSize = "&imageSize=LARGE";
 
+        int ingrMin = (int) Math.log(ingredients.size());
+        int ingrMax = ingrMax(ingredients.size());
+        String ingrRange = "&ingr=" + ingrMin + "-" + ingrMax;
+        for (int i = 0; i <= ingredients.size() - 1; i++) {
+            if (i == ingredients.size() - 1) {
+                ingrs += ingredients.get(i);
+                break;
+            }
+            ingrs += ingredients.get(i) + "%20";
+        }
+        url += ingrs + app_id
+                + app_key + ingrRange + imgSize;
+
+        if (t == 1) {
+            String mealType = "&mealType=" + mealOrCuisineType;
+            url += mealType;
+        } else {
+            String cuisineType = "&cuisineType=" + mealOrCuisineType;
+            url += cuisineType;
+        }
+        Log.d("request url", url);
+        mGetUrlContent.getDataVolley("GETCALL", url);
     }
     public void getRecipeUrlContent(ArrayList<String> ingredients, String mealType, String cuisineType) {
+        String url = "https://api.edamam.com/api/recipes/v2?type=public";
+        String app_id = "&app_id=" + recipe_api_id;
+        String app_key = "&app_key=" + recipe_api_key;
+        String ingrs = "&q=";
+        String imgSize = "&imageSize=LARGE";
+        String mType = "&mealType=" + mealType;
+        String cType = "&cuisineType=" + cuisineType;
 
+        int ingrMin = (int) Math.log(ingredients.size());
+        int ingrMax = ingrMax(ingredients.size());
+        String ingrRange = "&ingr=" + ingrMin + "-" + ingrMax;
+        for (int i = 0; i <= ingredients.size() - 1; i++) {
+            if (i == ingredients.size() - 1) {
+                ingrs += ingredients.get(i);
+                break;
+            }
+            ingrs += ingredients.get(i) + "%20";
+        }
+        url += ingrs + app_id
+                + app_key + ingrRange + imgSize + cType + mType;
+        Log.d("request url", url);
+        mGetUrlContent.getDataVolley("GETCALL", url);
     }
 
     public int ingrMax(int ingrNum) {
+
+        if ((ingrNum >= 3) && (ingrNum <= 5)) {
+            return 9;
+        }
+
         int diff = (int) Math.log(ingrNum);
         return ingrNum + (ingrNum - diff);
     }
-
-    
 
     public boolean isMetIngredientMin() {
         return ingredData.size() >= 3;

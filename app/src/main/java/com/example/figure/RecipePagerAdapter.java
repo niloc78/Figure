@@ -66,6 +66,10 @@ public class RecipePagerAdapter extends FragmentStateAdapter {
         notifyDataSetChanged();
     }
 
+    public RecipeFragment getRegisteredFragment(int pos) {
+        return recipeFrags.get(pos);
+    }
+
 
     @Override
     public int getItemCount() {

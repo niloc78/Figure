@@ -30,7 +30,7 @@ public class PreferenceRecyclerAdapter extends RecyclerView.Adapter<PreferenceRe
     Typeface face;
     Context context;
     private int selectedposition = -1;
-
+    private String selectedText = "";
 
     public PreferenceRecyclerAdapter(Context context ,LinkedHashMap<String, Integer> data) {
         this.data = data;
@@ -78,6 +78,7 @@ public class PreferenceRecyclerAdapter extends RecyclerView.Adapter<PreferenceRe
             if (holder.itemView.isSelected()) {
                 notifyItemChanged(selectedposition);
                 selectedposition = -1;
+                selectedText = "";
 
             } else {
 
@@ -86,6 +87,7 @@ public class PreferenceRecyclerAdapter extends RecyclerView.Adapter<PreferenceRe
                 }
 
                 selectedposition = holder.getAdapterPosition();
+                selectedText = holder.getPrefItemName().getText().toString();
                 notifyItemChanged(selectedposition);
 
             }
@@ -95,6 +97,14 @@ public class PreferenceRecyclerAdapter extends RecyclerView.Adapter<PreferenceRe
         // grey out default
         //imageView.clearColorFilter(); // clear grey filter
 
+    }
+
+    public int getSelectedPos() {
+        return selectedposition;
+    }
+
+    public String getSelectedText() {
+        return selectedText;
     }
 
     @Override

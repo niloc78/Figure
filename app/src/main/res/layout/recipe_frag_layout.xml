@@ -5,54 +5,106 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@null">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/recipe_image_card"
+    <ScrollView
+        android:id="@+id/recipe_frag_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        app:cardPreventCornerOverlap="false"
-        app:cardElevation="5dp">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/recipe_image"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="false"
-            android:scaleType="fitXY"/>
-    </com.google.android.material.card.MaterialCardView>
-    
-    <TextView
-        android:gravity="center"
-        android:id="@+id/recipe_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/recipe_image_card"
-        android:layout_centerHorizontal="true"
-        android:textSize="28sp"
-        app:autoSizeTextType="uniform"
-        app:autoSizeStepGranularity="2sp"
-        app:autoSizeMinTextSize="12sp"
-        app:autoSizeMaxTextSize="28sp"
-        android:textColor="@color/black"
-        android:layout_marginTop="18dp"/>
+            android:layout_height="match_parent">
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/recipe_image_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                app:cardPreventCornerOverlap="false"
+                app:cardElevation="5dp">
 
-    <ImageView
-        android:id="@+id/recipe_nutrition_divider"
+                <ImageView
+                    android:id="@+id/recipe_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="false"
+                    android:scaleType="fitXY"/>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:gravity="center"
+                android:id="@+id/recipe_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recipe_image_card"
+                android:layout_centerHorizontal="true"
+                android:textSize="28sp"
+                app:autoSizeTextType="uniform"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeMaxTextSize="28sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="18dp"/>
+
+            <ImageView
+                android:id="@+id/recipe_nutrition_divider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recipe_name"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/recipe_nutrition_divider"
+                android:layout_marginTop="14dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recipe_nutrition_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recipe_nutrition_divider"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="9dp"/>
+
+
+
+
+            <WebView
+                android:id="@+id/recipe_web_view"
+                android:layout_below="@id/recipe_nutrition_recycler_view"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+
+
+
+        </RelativeLayout>
+
+
+
+
+    </ScrollView>
+
+    <ImageButton
+        android:id="@+id/show_recipe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/recipe_name"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/show_recipe_selector_style"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/recipe_nutrition_divider"
-        android:layout_marginTop="14dp"/>
+        android:background="@android:color/transparent"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recipe_nutrition_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_centerHorizontal="true"
+    <ProgressBar
+        android:id="@+id/loading"
+        android:indeterminateDrawable="@drawable/progress"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/recipe_nutrition_divider"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="9dp"/>
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
+
+
 
 
 

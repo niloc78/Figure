@@ -94,7 +94,9 @@ public class RecipeHolderFragment extends Fragment {
 
     }
     public boolean unload() {
-        adapter.clearFragments();
+        if(adapter != null) {
+            adapter.clearFragments();
+        }
 //        tabLayout.removeAllTabs();
 //        recipePager.setAdapter(null);
         return true;
@@ -111,6 +113,16 @@ public class RecipeHolderFragment extends Fragment {
             adapter = new RecipePagerAdapter(getActivity(), recipeData);
             recipePager.setAdapter(adapter);
             recipePager.setOffscreenPageLimit(7);
+            recipePager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                    if (adapter.getRegisteredFragment(position).getShowRecipe().isSelected()) {
+                        adapter.getRegisteredFragment(position).getShowRecipe().performClick();
+                    }
+
+                }
+            });
         } else {
             Log.d("else", "else called");
             recipeData = recipeModel.sort();

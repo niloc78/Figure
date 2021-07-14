@@ -13,7 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,7 +27,10 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 
+import com.google.android.material.card.MaterialCardView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -43,7 +52,12 @@ public class RecipeFragment extends Fragment {
     NutritionAdapter nutritionAdapter;
     RecyclerView.LayoutManager nutritionLayoutManager;
     LinkedHashMap<String,String> nutrition;
-
+    WebView recipeWeb;
+    ImageButton showRecipe;
+    ScrollView recipeScrollView;
+    ProgressBar loading;
+    //MaterialCardView recipeWebCard;
+    //RelativeLayout recipeWebLayout;
     //    public IngredientFragment() {
 //        super(R.layout.ingred_frag_layout);
 //    }
@@ -90,6 +104,10 @@ public class RecipeFragment extends Fragment {
         this.context = null;
     }
 
+    public ImageButton getShowRecipe() {
+        return showRecipe;
+    }
+
     public void initViews(View view) {
         recipeImage = (ImageView) view.findViewById(R.id.recipe_image);
         recipeName = (TextView) view.findViewById(R.id.recipe_name);
@@ -103,7 +121,71 @@ public class RecipeFragment extends Fragment {
         Picasso.with(getActivity()).load(Uri.parse(recipe.getImageUrl())).into(recipeImage);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        recipeScrollView = (ScrollView) view.findViewById(R.id.recipe_frag_scrollview);
         recipeImage.setMinimumHeight((displayMetrics.widthPixels/4)*3);
+        //recipeWebCard = (MaterialCardView) view.findViewById(R.id.recipe_web_card);
+        loading = (ProgressBar) view.findViewById(R.id.loading);
+
+        showRecipe = (ImageButton) view.findViewById(R.id.show_recipe);
+
+        //recipeWebLayout = (RelativeLayout) view.findViewById(R.id.recipe_web_container);
+        recipeWeb = (WebView) view.findViewById(R.id.recipe_web_view);
+        recipeWeb.getSettings().setJavaScriptEnabled(true);
+//        recipeWeb.getSettings().setLoadWithOverviewMode(true);
+//        recipeWeb.getSettings().setUseWideViewPort(true);
+        recipeWeb.getSettings().setDomStorageEnabled(true);
+        recipeWeb.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                loading.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                loading.setVisibility(View.GONE);
+                recipeScrollView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        recipeScrollView.smoothScrollTo(0, recipeWeb.getTop());
+                    }
+                });
+            }
+        });
+        //recipeWebCard.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        //recipeWebLayout.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        recipeWeb.setLayerType(View.LAYER_TYPE_NONE, null);
+
+        showRecipe.setOnClickListener(v -> {
+            showRecipe.setSelected(!showRecipe.isSelected());
+            if (showRecipe.isSelected()) {
+                recipeWeb.loadUrl(recipe.getUrl());
+                //TransitionManager.beginDelayedTransition(recipeWeb, new AutoTransition());
+                recipeWeb.setVisibility(View.VISIBLE);
+
+            } else {
+                recipeWeb.loadUrl("about:blank");
+                //TransitionManager.beginDelayedTransition(recipeWeb, new AutoTransition());
+                recipeWeb.setVisibility(View.GONE);
+                //recipeScrollView.scrollTo(0, .getTop());
+//                recipeWebLayout.removeAllViews();
+//                recipeWebCard.removeAllViews();
+//
+//                recipeWeb.clearHistory();
+//                recipeWeb.clearCache(true);
+//                recipeWeb.onPause();
+//                recipeWeb.removeAllViews();
+//                recipeWeb.destroyDrawingCache();
+//                recipeWeb.destroy();
+//                recipeWeb = null;
+            }
+
+        });
+
+//        recipeWeb.setWebViewClient(new WebViewClient());
+//        recipeWeb.loadUrl(recipe.getUrl());
+
+
     }
 
     public void initNutrition(View view) {
