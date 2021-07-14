@@ -142,6 +142,7 @@ public class DineDeliveryPreferencesFragment extends Fragment {
         cuisineTypeRecyclerView.setLayoutManager(cuisineTypeLayoutManager);
         cuisineTypeAdapter = new PreferenceRecyclerAdapter(context,cuisineTypeData);
         cuisineTypeRecyclerView.setAdapter(cuisineTypeAdapter);
+
         radiusSlider = (Slider) view.findViewById(R.id.radius_slider);
         radiusTextView = (TextView) view.findViewById(R.id.mile_num);
 

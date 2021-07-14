@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 
@@ -59,7 +60,12 @@ public class RecipeHolderFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) { // what happens after onCreateView
         super.onViewCreated(view, savedInstanceState);
             if (recipePager == null) {
+                tabLayout = view.findViewById(R.id.recipe_tabs);
+                recipePager = (ViewPager2) view.findViewById(R.id.recipe_pager);
 
+                ((Button)view.findViewById(R.id.test_remove_button)).setOnClickListener(v -> {
+                    adapter.clearFragments();
+                });
             }
 
             getParentFragmentManager().setFragmentResultListener("recipesLoaded", this, new FragmentResultListener() {
@@ -88,20 +94,30 @@ public class RecipeHolderFragment extends Fragment {
 
     }
     public boolean unload() {
-        tabLayout.removeAllTabs();
-        recipePager.setAdapter(null);
-
+        adapter.clearFragments();
+//        tabLayout.removeAllTabs();
+//        recipePager.setAdapter(null);
         return true;
     }
 
     public void initRecipePager(View view) {
-        tabLayout = view.findViewById(R.id.recipe_tabs);
-        recipePager = (ViewPager2) view.findViewById(R.id.recipe_pager);
+//        tabLayout = view.findViewById(R.id.recipe_tabs);
+//        recipePager = (ViewPager2) view.findViewById(R.id.recipe_pager);
         RecipeModel recipeModel = new ViewModelProvider(requireActivity()).get(RecipeModel.class);
         //recipeData = new ArrayList<Recipe>();
-        recipeData = recipeModel.sort();
-        adapter = new RecipePagerAdapter(getActivity(), recipeData);
-        recipePager.setAdapter(adapter);
+
+        if (adapter == null) {
+            recipeData = recipeModel.sort();
+            adapter = new RecipePagerAdapter(getActivity(), recipeData);
+            recipePager.setAdapter(adapter);
+            recipePager.setOffscreenPageLimit(7);
+        } else {
+            Log.d("else", "else called");
+            recipeData = recipeModel.sort();
+            adapter.recipes = recipeData;
+            adapter.notifyDataSetChanged();
+        }
+
 
         new TabLayoutMediator(tabLayout, recipePager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
