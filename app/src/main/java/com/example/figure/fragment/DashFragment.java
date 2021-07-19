@@ -12,7 +12,7 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.figure.DashModel;
+import com.example.figure.data.DashModel;
 import com.example.figure.adapter.DashPagerAdapter;
 import com.example.figure.MainActivity;
 import com.example.figure.R;

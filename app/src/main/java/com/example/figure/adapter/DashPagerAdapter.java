@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.example.figure.DashModel;
+import com.example.figure.data.DashModel;
 import com.example.figure.R;
 
 import java.util.List;

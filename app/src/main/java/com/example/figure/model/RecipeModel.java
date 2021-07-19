@@ -6,20 +6,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.figure.Hit;
-import com.example.figure.Recipe;
-import com.example.figure.RecipeResults;
+import com.example.figure.data.Hit;
+import com.example.figure.data.Recipe;
+import com.example.figure.data.RecipeResults;
 import com.example.figure.RecipeSorter;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import org.json.JSONObject;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class RecipeModel extends ViewModel {
     private final MutableLiveData<String> response = new MutableLiveData<String>();

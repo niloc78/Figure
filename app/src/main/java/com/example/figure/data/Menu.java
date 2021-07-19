@@ -1,6 +1,4 @@
-package com.example.figure;
-
-import java.util.HashMap;
+package com.example.figure.data;
 
 public class Menu {
     private String menu_name;

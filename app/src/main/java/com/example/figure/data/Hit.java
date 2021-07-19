@@ -1,4 +1,4 @@
-package com.example.figure;
+package com.example.figure.data;
 
 public class Hit {
     private Recipe recipe;

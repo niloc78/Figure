@@ -1,13 +1,11 @@
 package com.example.figure.model;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.figure.Restaurant;
-import com.example.figure.RestaurantResults;
+import com.example.figure.data.Restaurant;
+import com.example.figure.data.RestaurantResults;
 import com.google.gson.Gson;
 
 import java.util.Random;

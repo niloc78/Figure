@@ -17,7 +17,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.figure.MainActivity;
 import com.example.figure.R;
-import com.example.figure.Recipe;
+import com.example.figure.data.Recipe;
 import com.example.figure.model.RecipeModel;
 import com.example.figure.adapter.RecipePagerAdapter;
 import com.google.android.material.tabs.TabLayout;

@@ -1,4 +1,6 @@
-package com.example.figure;
+package com.example.figure.data;
+
+import com.example.figure.data.Menu;
 
 import java.util.HashMap;
 

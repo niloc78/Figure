@@ -1,5 +1,7 @@
 package com.example.figure;
 
+import com.example.figure.data.Recipe;
+
 import java.util.Comparator;
 
 public class RecipeSorter implements Comparator<Recipe> {

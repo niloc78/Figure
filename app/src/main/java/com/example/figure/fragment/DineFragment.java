@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.figure.MainActivity;
 import com.example.figure.R;
-import com.example.figure.Restaurant;
+import com.example.figure.data.Restaurant;
 import com.example.figure.model.RestaurantModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 

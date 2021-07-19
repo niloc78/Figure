@@ -1,6 +1,4 @@
-package com.example.figure;
-
-import java.util.HashMap;
+package com.example.figure.data;
 
 public class RestaurantResults {
     private int totalResults;

@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.figure.Recipe;
+import com.example.figure.data.Recipe;
 import com.example.figure.fragment.RecipeFragment;
 
 import java.util.ArrayList;

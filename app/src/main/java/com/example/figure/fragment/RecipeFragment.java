@@ -27,7 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.figure.MainActivity;
 import com.example.figure.adapter.NutritionAdapter;
 import com.example.figure.R;
-import com.example.figure.Recipe;
+import com.example.figure.data.Recipe;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
