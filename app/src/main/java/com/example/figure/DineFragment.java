@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -58,7 +60,11 @@ public class DineFragment extends Fragment {
         if (prefButton == null) {
             initPrefButton(view);
             initDinePref(view);
-
+            ((Button) view.findViewById(R.id.test_dine_button)).setOnClickListener(v -> {
+                RestaurantModel restaurantModel = new ViewModelProvider(requireActivity()).get(RestaurantModel.class);
+                Restaurant restaurant = restaurantModel.chooseRestaurant();
+                Log.d("Test restaurant name", restaurant.getRestaurant_name());
+            });
         }
     }
 

@@ -108,6 +108,7 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
     public IResult constrIResultCallback() {
         return new IResult() {
             @Override
+
             public void notifySuccess(String requestType, JSONObject response) {
                 Log.d("Recipe api response", response.toString());;
                 //recipeModel = new ViewModelProvider(requireActivity()).get(RecipeModel.class);

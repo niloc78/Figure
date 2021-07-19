@@ -56,6 +56,7 @@ public class RecipeFragment extends Fragment {
     ImageButton showRecipe;
     ScrollView recipeScrollView;
     ProgressBar loading;
+    ImageView recipeNutritionDivider;
     //MaterialCardView recipeWebCard;
     //RelativeLayout recipeWebLayout;
     //    public IngredientFragment() {
@@ -184,7 +185,7 @@ public class RecipeFragment extends Fragment {
 
 //        recipeWeb.setWebViewClient(new WebViewClient());
 //        recipeWeb.loadUrl(recipe.getUrl());
-
+        recipeNutritionDivider = (ImageView) view.findViewById(R.id.recipe_nutrition_divider);
 
     }
 
@@ -249,6 +250,9 @@ public class RecipeFragment extends Fragment {
 //        });
     }
 
+    public ImageView getDivider() {
+        return recipeNutritionDivider;
+    }
 
     @Override
     public String toString () {

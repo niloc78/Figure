@@ -68,6 +68,22 @@
 
     </com.google.android.material.card.MaterialCardView>
 
+    <FrameLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/menu_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:layout_below="@id/dinetext"/>
+
+    <Button
+        android:id="@+id/test_dine_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test Button"
+        android:layout_centerInParent="true"/>
+
+
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/dine_coord_layout"
@@ -97,6 +113,7 @@
         </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
 
 

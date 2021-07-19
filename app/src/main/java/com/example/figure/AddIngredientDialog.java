@@ -7,12 +7,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class AddIngredientDialog extends AppCompatDialogFragment {
     private EditText edit_ingredient;
@@ -26,7 +28,7 @@ public class AddIngredientDialog extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.add_ingred_dialog, null);
 
-        builder.setView(view)
+        AlertDialog dialog = builder.setView(view)
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -37,12 +39,26 @@ public class AddIngredientDialog extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String ingred = edit_ingredient.getText().toString();
-                        listener.addIngredient(ingred);
+                        if (ingred.replace(" ", "").equalsIgnoreCase("")) {
+                            Toast.makeText(getContext(), "Cannot have blank ingredient", Toast.LENGTH_SHORT).show();
+                        } else {
+                            listener.addIngredient(ingred);
+                        }
                     }
-                });
+                }).show();
+
         edit_ingredient = view.findViewById(R.id.edit_ingredient);
 
-        return builder.create();
+
+
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackground(ContextCompat.getDrawable(getContext(), R.color.white));
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackground(ContextCompat.getDrawable(getContext(), R.color.white));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+
+
+        return dialog;
     }
 
     @Override

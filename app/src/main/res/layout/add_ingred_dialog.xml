@@ -3,13 +3,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
     android:padding="16dp">
 
     <EditText
+        android:layout_centerVertical="true"
         android:id="@+id/edit_ingredient"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Ingredient (eg. Broccoli)"
+        android:backgroundTint="@color/main_pink"
         android:singleLine="true"
         android:maxLength="20"/>
 

@@ -61,7 +61,7 @@
                     app:strokeWidth="1dp"
                     app:cardBackgroundColor="@color/white">
 
-                    <RelativeLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -71,17 +71,31 @@
                             android:layout_height="wrap_content"
                             android:src="@drawable/search_location_icon"
                             android:backgroundTint="@android:color/transparent"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="14dp"
-                            android:layout_alignParentLeft="true"/>
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="@id/search_bar_divider"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
                         <ImageView
+                            android:id="@+id/search_bar_divider"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/location_search_bar_divider"
-                            android:layout_toRightOf="@id/location_search_bar_button"
-                            android:layout_centerVertical="true"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toRightOf="@id/location_search_bar_button"
                             android:layout_marginLeft="11dp"/>
-                    </RelativeLayout>
+
+                        <fragment
+                            android:id="@+id/place_search_autocomplete"
+                            app:layout_constraintLeft_toRightOf="@id/search_bar_divider"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -150,6 +164,8 @@
                     android:layout_below="@id/radius_slider"
                     android:layout_marginTop="15dp"
                     android:layout_centerHorizontal="true"/>
+
+
 
                 <TextView
                     android:id="@+id/restaurant_prices"
@@ -259,6 +275,7 @@
                     android:layout_below="@id/dine_delivery_pref_divider_3"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="27dp"
+                    android:clickable="true"
                     app:cardPreventCornerOverlap="false"
                     app:cardCornerRadius="13dp"
                     app:cardElevation="3dp"
@@ -271,7 +288,7 @@
                         android:id="@+id/update_preferences"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Update Preferences"
+                        android:text="Search"
                         android:layout_gravity="center"
                         android:textSize="21sp"/>
 

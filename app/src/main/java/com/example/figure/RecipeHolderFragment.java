@@ -96,6 +96,7 @@ public class RecipeHolderFragment extends Fragment {
     public boolean unload() {
         if(adapter != null) {
             adapter.clearFragments();
+            recipeData.clear();
         }
 //        tabLayout.removeAllTabs();
 //        recipePager.setAdapter(null);
@@ -115,10 +116,12 @@ public class RecipeHolderFragment extends Fragment {
             recipePager.setOffscreenPageLimit(7);
             recipePager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
                 @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { // gets called when pages are cleared
                     super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-                    if (adapter.getRegisteredFragment(position).getShowRecipe().isSelected()) {
-                        adapter.getRegisteredFragment(position).getShowRecipe().performClick();
+                    if (recipeData.size() != 0) {
+                        if (adapter.getRegisteredFragment(position).getShowRecipe().isSelected()) {
+                            adapter.getRegisteredFragment(position).getShowRecipe().performClick();
+                        }
                     }
 
                 }

@@ -15,20 +15,33 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.VolleyError;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.slider.Slider;
 
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 public class DineDeliveryPreferencesFragment extends Fragment {
@@ -41,7 +54,16 @@ public class DineDeliveryPreferencesFragment extends Fragment {
     RecyclerView cuisineTypeRecyclerView;
     RecyclerView.LayoutManager cuisineTypeLayoutManager;
     LinkedHashMap<String, Integer> cuisineTypeData;
+    ImageButton locationSearchBarButton;
+    RadioGroup priceRadioGroup;
     PreferenceRecyclerAdapter cuisineTypeAdapter;
+    MaterialCardView searchButton;
+    public static final String places_key = BuildConfig.PLACES_API_KEY;
+    private Place currLocation;
+    private String price_level;
+    GetUrlContent mGetUrlContent;
+    RestaurantModel restaurantModel;
+    public static final String documenu_key = BuildConfig.DOCUMENU_API_KEY;
 
     @Override
     public void onCreate(Bundle savedInstancestate) {
@@ -61,8 +83,10 @@ public class DineDeliveryPreferencesFragment extends Fragment {
         if (_rootView == null) {
             _rootView = inflater.inflate(R.layout.dine_delivery_preferences_layout, container, false);
             if (getParentFragment() instanceof DineFragment) {
+
                 mode = "Dine";
                 Log.d(mode + " preferences created", "created");
+
             } else if (getParentFragment() instanceof DeliveryFragment) {
                 mode = "Delivery";
                 Log.d(mode + " preferences created", "created");
@@ -70,6 +94,10 @@ public class DineDeliveryPreferencesFragment extends Fragment {
 
         }
         return _rootView;
+    }
+
+    public float getRadius() {
+        return radiusSlider.getValue();
     }
 
     @Override
@@ -90,10 +118,11 @@ public class DineDeliveryPreferencesFragment extends Fragment {
                 });
             }
 
-
+            mGetUrlContent = new GetUrlContent(constrIResultCallback(), context);
+            restaurantModel = new ViewModelProvider(requireActivity()).get(RestaurantModel.class);
             initViewsAndButtons(view);
             initRecyclerViews(view);
-
+            initPlacesAPI(view);
 
         }
 
@@ -101,6 +130,80 @@ public class DineDeliveryPreferencesFragment extends Fragment {
 
     }
 
+    private IResult constrIResultCallback() {
+        return new IResult() {
+            @Override
+            public void notifySuccess(String requestType, JSONObject response) {
+                Log.d("restaurant response", response.toString());
+                restaurantModel.setResponse(response.toString());
+            }
+
+            @Override
+            public void notifyError(String requestType, VolleyError error) {
+                Log.d("no restaurant response", "none");
+            }
+
+            @Override
+            public void notifySuccess(String requestType, JSONObject response, String errand) {
+
+            }
+        };
+    }
+
+    private String buildUrl() {
+        String url = "https://api.documenu.com/v2/restaurants/search/geo?";
+        LatLng latlng = getCurrLocation().getLatLng();
+        String lat = "lat=" + Double.toString(latlng.latitude);
+        String lon = "&lon=" + Double.toString(latlng.longitude);
+        String distance = "&distance=" + Float.toString(getRadius());
+        String fullmenu = "&fullmenu";
+        String cuisine = "&cuisine=" + getCuisine();
+
+        url += lat + lon + distance + fullmenu + cuisine + "&key=" + documenu_key;
+        return url;
+    }
+
+    void initPlacesAPI(View view) {
+        if (!Places.isInitialized()) {
+            Places.initialize(context, places_key);
+        }
+        PlacesClient placesClient = Places.createClient(context);
+
+        AutocompleteSupportFragment autocompleteSupportFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.place_search_autocomplete);
+        autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+        autocompleteSupportFragment.setHint("Enter your location");
+
+        autocompleteSupportFragment.getView().findViewById(R.id.places_autocomplete_search_button).setVisibility(View.GONE);
+        final View root = autocompleteSupportFragment.getView();
+
+        locationSearchBarButton = (ImageButton) view.findViewById(R.id.location_search_bar_button);
+        locationSearchBarButton.setOnClickListener(v -> {
+            root.post(new Runnable() {
+                @Override
+                public void run() {
+                    root.findViewById(R.id.places_autocomplete_search_input).performClick();
+                }
+            });
+        });
+
+        //autocompleteSupportFragment.setMenuVisibility(false);
+        autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                currLocation = place;
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+                currLocation = null;
+            }
+        });
+
+    }
+
+    public Place getCurrLocation() {
+        return currLocation;
+    }
 
     public void initViewsAndButtons(View view) {
         Typeface face = ResourcesCompat.getFont(context, R.font.josefinsans);
@@ -114,7 +217,42 @@ public class DineDeliveryPreferencesFragment extends Fragment {
         ((RadioButton) view.findViewById(R.id.rad2)).setTypeface(face);
         ((RadioButton) view.findViewById(R.id.rad3)).setTypeface(face);
         ((TextView) view.findViewById(R.id.update_preferences)).setTypeface(face);
+        priceRadioGroup = (RadioGroup) view.findViewById(R.id.price_radio_group);
+        priceRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                Log.d("checked id: ", Integer.toString(checkedId));
+                if (checkedId == -1) {
+                    price_level = "";
+                } else {
+                    price_level = ((RadioButton) group.findViewById(checkedId)).getText().toString();
+                }
 
+                Log.d("price level: ", price_level);
+            }
+        });
+        searchButton = (MaterialCardView) view.findViewById(R.id.update_preferences_card_view);
+        searchButton.setOnClickListener(v -> {
+            if (isValidPreferences()) {
+                mGetUrlContent.getDataVolley("GETCALL", buildUrl());
+               // ((ImageButton) view.findViewById(R.id.dine_delivery_pref_back_button)).performClick(); // to close
+            } else {
+                Toast.makeText(context, "Location and cuisine type must be set", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+    public String getPriceLevel() {
+        return price_level;
+    }
+
+    private String getCuisine() {
+        return cuisineTypeAdapter.getSelectedText();
+    }
+
+    private boolean isValidPreferences() {
+        return currLocation != null && getCuisine() != "";
     }
 
     public void initRecyclerViews(View view) {
@@ -152,11 +290,6 @@ public class DineDeliveryPreferencesFragment extends Fragment {
                 radiusTextView.setText(Float.toString(radiusSlider.getValue()));
             }
         });
-
-
-
-
-
     }
 
     @Override
