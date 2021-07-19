@@ -1,4 +1,4 @@
-package com.example.figure;
+package com.example.figure.fragment;
 
 import android.app.Activity;
 
@@ -8,16 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.figure.DashModel;
+import com.example.figure.adapter.DashPagerAdapter;
+import com.example.figure.MainActivity;
+import com.example.figure.R;
 import com.google.android.material.tabs.TabLayout;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;

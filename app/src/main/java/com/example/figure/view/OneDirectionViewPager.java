@@ -1,4 +1,4 @@
-package com.example.figure;
+package com.example.figure.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
+import com.example.figure.SwipeDirection;
 
 public class OneDirectionViewPager extends ViewPager {
     private float initialXValue;

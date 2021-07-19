@@ -1,9 +1,7 @@
-package com.example.figure;
+package com.example.figure.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.figure.MainActivity;
+import com.example.figure.adapter.PreferenceRecyclerAdapter;
+import com.example.figure.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class CookPreferencesFragment extends Fragment {
@@ -28,8 +28,8 @@ public class CookPreferencesFragment extends Fragment {
     RecyclerView.LayoutManager cuisineTypeLayoutManager;
     LinkedHashMap<String, Integer> mealTypeData;
     LinkedHashMap<String, Integer> cuisineTypeData;
-    PreferenceRecyclerAdapter mealTypeAdapter;
-    PreferenceRecyclerAdapter cuisineTypeAdapter;
+    public PreferenceRecyclerAdapter mealTypeAdapter;
+    public PreferenceRecyclerAdapter cuisineTypeAdapter;
 
     //    public IngredientFragment() {
 //        super(R.layout.ingred_frag_layout);
@@ -66,7 +66,7 @@ public class CookPreferencesFragment extends Fragment {
             ((ImageButton) view.findViewById(R.id.cook_pref_back_button)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((CookFragment) getParentFragment()).sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    ((CookFragment) getParentFragment()).getSheetBehavior().setState(BottomSheetBehavior.STATE_HIDDEN);
                     ((MainFragment)getParentFragment().getParentFragment()).mainSideBarIcon.setVisibility(View.VISIBLE);
 
 //                    scrim.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +137,8 @@ public class CookPreferencesFragment extends Fragment {
 
 
     }
+
+
 
     @Override
     public void onDetach() {

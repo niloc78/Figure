@@ -1,33 +1,24 @@
 package com.example.figure;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
-import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
-import com.google.android.material.tabs.TabLayout;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.figure.adapter.MainPagerAdapter;
+import com.example.figure.fragment.MainFragment;
+import com.example.figure.view.OneDirectionViewPager;
 
 public class MainActivity extends FragmentActivity implements FragmentChangeListener {
     public static OneDirectionViewPager viewPager;
-    Integer colorFrom;
-    Integer colorTo;
-    ValueAnimator colorAnim;
+    public Integer colorFrom;
+    public Integer colorTo;
+    public ValueAnimator colorAnim;
     public MainActivity() {
         super(R.layout.activity_main);
     }

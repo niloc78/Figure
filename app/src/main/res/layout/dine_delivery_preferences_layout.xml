@@ -191,7 +191,7 @@
                     android:weightSum="2"
                     android:layout_marginLeft="28dp">
 
-                        <com.example.figure.CustomRadioGroup
+                        <com.example.figure.view.CustomRadioGroup
                             android:id="@+id/rad1"
                             android:text="$"
                             android:layoutDirection="rtl"
@@ -201,7 +201,7 @@
                             android:layout_width="wrap_content"
                             android:buttonTint="#FC7E7E"
                             android:layout_height="wrap_content"/>
-                        <com.example.figure.CustomRadioGroup
+                        <com.example.figure.view.CustomRadioGroup
                             android:id="@+id/rad2"
                             android:text="$$"
                             android:layoutDirection="rtl"
@@ -213,7 +213,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
 
-                        <com.example.figure.CustomRadioGroup
+                        <com.example.figure.view.CustomRadioGroup
                             android:id="@+id/rad3"
                             android:text="$$$"
                             android:layoutDirection="rtl"

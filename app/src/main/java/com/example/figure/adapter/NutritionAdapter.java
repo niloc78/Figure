@@ -1,4 +1,4 @@
-package com.example.figure;
+package com.example.figure.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import com.example.figure.R;
+
 import java.util.LinkedHashMap;
 
 public class NutritionAdapter extends RecyclerView.Adapter<NutritionAdapter.ViewHolder> {

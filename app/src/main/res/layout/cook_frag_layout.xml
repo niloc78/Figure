@@ -14,7 +14,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="18dp"/>
 
-    <com.example.figure.CustomViewPager
+    <com.example.figure.view.CustomViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/cook_pager"
         android:layout_below="@+id/cooktext"
@@ -23,7 +23,7 @@
         android:layout_marginTop="6dp"
         android:layout_alignParentBottom="true">
 
-    </com.example.figure.CustomViewPager>
+    </com.example.figure.view.CustomViewPager>
 
 
     <com.google.android.material.tabs.TabLayout

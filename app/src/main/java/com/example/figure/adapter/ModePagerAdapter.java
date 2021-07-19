@@ -1,11 +1,13 @@
-package com.example.figure;
-
-import android.view.MotionEvent;
+package com.example.figure.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+
+import com.example.figure.fragment.CookFragment;
+import com.example.figure.fragment.DeliveryFragment;
+import com.example.figure.fragment.DineFragment;
 
 public class ModePagerAdapter extends FragmentStatePagerAdapter {
     int numTabs;

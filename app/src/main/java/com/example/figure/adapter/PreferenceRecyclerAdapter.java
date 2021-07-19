@@ -1,4 +1,4 @@
-package com.example.figure;
+package com.example.figure.adapter;
 
 import android.content.Context;
 import android.graphics.ColorMatrix;
@@ -14,13 +14,10 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.figure.R;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class PreferenceRecyclerAdapter extends RecyclerView.Adapter<PreferenceRecyclerAdapter.ViewHolder> {

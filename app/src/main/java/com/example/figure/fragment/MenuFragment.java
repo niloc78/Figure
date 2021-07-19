@@ -1,4 +1,4 @@
-package com.example.figure;
+package com.example.figure.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+
+import com.example.figure.MainActivity;
 
 public class MenuFragment extends Fragment {
     Context context;

@@ -16,7 +16,7 @@ public class GetUrlContent {
     IResult mResultCallback = null;
     Context mContext;
 
-    GetUrlContent(IResult resultCallback, Context context) {
+    public GetUrlContent(IResult resultCallback, Context context) {
         mResultCallback = resultCallback;
         mContext = context;
     }

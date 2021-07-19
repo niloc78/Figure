@@ -1,4 +1,4 @@
-package com.example.figure;
+package com.example.figure.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -1,32 +1,34 @@
-package com.example.figure;
+package com.example.figure.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-public class CookPagerAdapter extends FragmentStatePagerAdapter {
+import com.example.figure.fragment.DashFragment;
+import com.example.figure.fragment.MainFragment;
 
+public class MainPagerAdapter extends FragmentStatePagerAdapter {
     int numTabs;
 
-    public CookPagerAdapter(FragmentManager fm, int numTabs) {
+    public MainPagerAdapter(FragmentManager fm, int numTabs) {
         super(fm);
         this.numTabs = numTabs;
     }
-
     @NonNull
     @Override
     public Fragment getItem(int position) {
         switch(position) {
             case 0:
-                IngredientFragment ingredFragment = new IngredientFragment();
-                return ingredFragment;
+                DashFragment dashFrag = new DashFragment();
+                return dashFrag;
             case 1:
-                RecipeHolderFragment recipeHolderFrag = new RecipeHolderFragment();
-                return recipeHolderFrag;
+                MainFragment mainFrag = new MainFragment();
+                return mainFrag;
             default:
                 return null;
         }
+
     }
 
     @Override

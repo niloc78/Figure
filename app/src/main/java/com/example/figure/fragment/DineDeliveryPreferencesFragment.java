@@ -1,4 +1,4 @@
-package com.example.figure;
+package com.example.figure.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,25 +8,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
+import com.example.figure.BuildConfig;
+import com.example.figure.GetUrlContent;
+import com.example.figure.IResult;
+import com.example.figure.MainActivity;
+import com.example.figure.adapter.PreferenceRecyclerAdapter;
+import com.example.figure.R;
+import com.example.figure.model.RestaurantModel;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
@@ -39,7 +41,6 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.slider.Slider;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;

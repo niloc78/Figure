@@ -1,28 +1,16 @@
-package com.example.figure;
+package com.example.figure.adapter;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.squareup.picasso.Picasso;
+import com.example.figure.Recipe;
+import com.example.figure.fragment.RecipeFragment;
 
-import org.w3c.dom.Text;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class RecipePagerAdapter extends FragmentStateAdapter {
 
@@ -72,6 +60,13 @@ public class RecipePagerAdapter extends FragmentStateAdapter {
         return recipeFrags.get(pos);
     }
 
+    public ArrayList<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(ArrayList<Recipe> recipes) {
+        this.recipes = recipes;
+    }
 
     @Override
     public int getItemCount() {

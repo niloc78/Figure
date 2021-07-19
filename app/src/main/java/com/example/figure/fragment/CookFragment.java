@@ -1,25 +1,24 @@
-package com.example.figure;
+package com.example.figure.fragment;
 
 import android.app.Activity;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager.widget.ViewPager;
 
+import com.example.figure.adapter.CookPagerAdapter;
+import com.example.figure.view.CustomViewPager;
+import com.example.figure.MainActivity;
+import com.example.figure.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.tabs.TabLayout;
 
@@ -30,7 +29,7 @@ public class CookFragment extends Fragment {
     public static CustomViewPager cookPager;
     TabLayout cookTabLayout;
 
-    BottomSheetBehavior sheetBehavior;
+    public BottomSheetBehavior sheetBehavior;
 
 //    public CookFragment() {
 //        super(R.layout.cook_frag_layout);
@@ -129,7 +128,6 @@ public class CookFragment extends Fragment {
         sheetBehavior.setDraggable(false);
 
 
-
 //
 //        ((ImageButton) view.findViewById(R.id.cook_pref_button)).bringToFront();
 //        ((ImageButton) view.findViewById(R.id.cook_pref_button)).setOnClickListener(new View.OnClickListener() {
@@ -147,6 +145,7 @@ public class CookFragment extends Fragment {
         return "cookFragment";
     }
 
-
-
+    public BottomSheetBehavior getSheetBehavior() {
+        return sheetBehavior;
+    }
 }

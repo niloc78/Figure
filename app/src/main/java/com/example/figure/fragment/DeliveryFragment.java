@@ -1,4 +1,4 @@
-package com.example.figure;
+package com.example.figure.fragment;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,18 +15,19 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
+import com.example.figure.MainActivity;
+import com.example.figure.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
-public class DineFragment extends Fragment {
+public class DeliveryFragment extends Fragment {
     Context context;
     View _rootView;
     Button prefButton;
     Integer colorFrom;
     Integer colorTo;
     ValueAnimator colorAnim;
-    BottomSheetBehavior sheetBehavior;
+    public BottomSheetBehavior sheetBehavior;
 
     //    public IngredientFragment() {
 //        super(R.layout.ingred_frag_layout);
@@ -48,7 +48,7 @@ public class DineFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (_rootView == null) {
-            _rootView = inflater.inflate(R.layout.dine_frag_layout, container, false);
+            _rootView = inflater.inflate(R.layout.delivery_frag_layout, container, false);
 
         }
         return _rootView;
@@ -59,12 +59,8 @@ public class DineFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (prefButton == null) {
             initPrefButton(view);
-            initDinePref(view);
-            ((Button) view.findViewById(R.id.test_dine_button)).setOnClickListener(v -> {
-                RestaurantModel restaurantModel = new ViewModelProvider(requireActivity()).get(RestaurantModel.class);
-                Restaurant restaurant = restaurantModel.chooseRestaurant();
-                Log.d("Test restaurant name", restaurant.getRestaurant_name());
-            });
+            initDeliveryPref(view);
+
         }
     }
 
@@ -80,7 +76,7 @@ public class DineFragment extends Fragment {
     }
 
     public void initPrefButton(View view) {
-        prefButton = view.findViewById(R.id.preferences_button);
+        prefButton = view.findViewById(R.id.delivery_preferences_button);
         colorFrom = ContextCompat.getColor(context, R.color.black);
         colorTo = ContextCompat.getColor(context, R.color.main_pink);
         colorAnim = ValueAnimator.ofArgb(colorFrom, colorTo);
@@ -105,13 +101,13 @@ public class DineFragment extends Fragment {
 
     }
 
-    public void initDinePref(View view) {
+    public void initDeliveryPref(View view) {
         FragmentManager fm = getChildFragmentManager();
         FragmentTransaction trans = fm.beginTransaction();
-        trans.add(R.id.dine_pref_container, new DineDeliveryPreferencesFragment(), "dinePreferencesFragment");
+        trans.add(R.id.delivery_pref_container, new DineDeliveryPreferencesFragment(), "dinePreferencesFragment");
         trans.commit();
 
-        sheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.dine_pref_view));
+        sheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.delivery_pref_view));
 
         sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 

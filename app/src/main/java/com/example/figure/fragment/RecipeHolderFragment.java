@@ -1,4 +1,4 @@
-package com.example.figure;
+package com.example.figure.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,19 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TableLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.figure.MainActivity;
+import com.example.figure.R;
+import com.example.figure.Recipe;
+import com.example.figure.model.RecipeModel;
+import com.example.figure.adapter.RecipePagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -129,7 +130,7 @@ public class RecipeHolderFragment extends Fragment {
         } else {
             Log.d("else", "else called");
             recipeData = recipeModel.sort();
-            adapter.recipes = recipeData;
+            adapter.setRecipes(recipeData);
             adapter.notifyDataSetChanged();
         }
 

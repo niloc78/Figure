@@ -1,4 +1,4 @@
-package com.example.figure;
+package com.example.figure.model;
 
 import android.util.Log;
 
@@ -6,6 +6,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.figure.Hit;
+import com.example.figure.Recipe;
+import com.example.figure.RecipeResults;
+import com.example.figure.RecipeSorter;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
