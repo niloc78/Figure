@@ -2,6 +2,7 @@ package com.example.figure.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
@@ -110,7 +111,6 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
     public IResult constrIResultCallback() {
         return new IResult() {
             @Override
-
             public void notifySuccess(String requestType, JSONObject response) {
                 Log.d("Recipe api response", response.toString());;
                 //recipeModel = new ViewModelProvider(requireActivity()).get(RecipeModel.class);
@@ -124,6 +124,11 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
                 result.putBoolean("loaded", true);
                 getParentFragmentManager().setFragmentResult("recipesLoaded", result);
 
+
+            }
+
+            @Override
+            public void notifySuccess(String requestType, Bitmap response) {
 
             }
 

@@ -2,6 +2,7 @@ package com.example.figure.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -137,6 +138,14 @@ public class DineDeliveryPreferencesFragment extends Fragment {
             public void notifySuccess(String requestType, JSONObject response) {
                 Log.d("restaurant response", response.toString());
                 restaurantModel.setResponse(response.toString());
+                if (getMode().equalsIgnoreCase("Dine")) {
+                    ((DineFragment) getParentFragment()).initMenuFragment();
+                }
+            }
+
+            @Override
+            public void notifySuccess(String requestType, Bitmap response) {
+
             }
 
             @Override
@@ -236,7 +245,7 @@ public class DineDeliveryPreferencesFragment extends Fragment {
         searchButton.setOnClickListener(v -> {
             if (isValidPreferences()) {
                 mGetUrlContent.getDataVolley("GETCALL", buildUrl());
-               // ((ImageButton) view.findViewById(R.id.dine_delivery_pref_back_button)).performClick(); // to close
+               ((ImageButton) view.findViewById(R.id.dine_delivery_pref_back_button)).performClick(); // to close
             } else {
                 Toast.makeText(context, "Location and cuisine type must be set", Toast.LENGTH_SHORT).show();
             }

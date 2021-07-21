@@ -23,6 +23,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    buildFeatures {
+        viewBinding true
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -30,6 +33,10 @@ android {
 }
 
 dependencies {
+    implementation 'com.xwray:groupie:2.9.0'
+    implementation 'com.xwray:groupie-viewbinding:2.8.0'
+    implementation 'com.xwray:groupie-kotlin-android-extensions:2.8.0'
+    implementation 'com.bignerdranch.android:expandablerecyclerview:1.0.3'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'com.google.android.libraries.places:places:2.4.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'

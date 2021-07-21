@@ -98,6 +98,7 @@ public class MainFragment extends Fragment {
         final ModePagerAdapter adapter = new ModePagerAdapter(getChildFragmentManager(), 3);
         modePager.setAdapter(adapter);
         modePager.setOffscreenPageLimit(2);
+
         modePager.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

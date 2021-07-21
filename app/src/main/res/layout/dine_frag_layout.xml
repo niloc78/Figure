@@ -14,6 +14,7 @@
         android:layout_marginTop="18dp"/>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/sample_menu_card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/dinetext"
@@ -76,12 +77,6 @@
         android:background="@null"
         android:layout_below="@id/dinetext"/>
 
-    <Button
-        android:id="@+id/test_dine_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Test Button"
-        android:layout_centerInParent="true"/>
 
 
 

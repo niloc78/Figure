@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.card.MaterialCardView
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:id="@+id/restuarant_image_card"
         android:layout_width="match_parent"
         app:cardPreventCornerOverlap="false"
@@ -21,34 +18,82 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/dine_1_background_1"
+            android:src="@drawable/dine_1_background_1_empty"
             android:id="@+id/restaurant_image_view"
             android:adjustViewBounds="false"
             android:scaleType="fitXY" />
 
     </com.google.android.material.card.MaterialCardView>
 
+    <ProgressBar
+        android:elevation="11dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/restaurant_name"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/loading"
+        android:indeterminateDrawable="@drawable/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/restaurant_name"
+        android:layout_alignBottom="@id/restuarant_image_card"
+        android:layout_width="match_parent"
+        android:gravity="bottom"
+        android:text="Figure Staurant"
+        android:elevation="11dp"
+        android:paddingLeft="4dp"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="17sp"
+        android:autoSizeMaxTextSize="45sp"
+        android:autoSizeStepGranularity="2sp"
+        android:background="#40000000"
+        android:maxLines="2"
+        android:textSize="45sp"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"/>
+
 
     <TextView
         android:id="@+id/filler"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Blank Space"
-        android:textSize="38sp"
-        app:layout_constraintTop_toBottomOf="@id/restuarant_image_card"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/menu_recycler_view"
-        app:layout_constraintHorizontal_bias="0.2"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/menu_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/filler" />
+        android:background="@color/white"
+        android:text="Blank Space"
+        android:textSize="38sp"
+        android:layout_below="@id/restuarant_image_card"/>
+    <ImageView
+        android:paddingTop="10dp"
+        android:paddingBottom="15dp"
+        android:id="@+id/divider"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/menu_divider"
+        android:layout_below="@id/filler"/>
+<androidx.core.widget.NestedScrollView
+    android:fadeScrollbars="true"
+    android:scrollbars="vertical"
+    android:scrollbarSize="4dp"
+    android:scrollbarThumbVertical="@drawable/scrollbar"
+    android:id="@+id/menu_nested_scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:layout_below="@id/divider">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:background="@color/white"
+        android:paddingRight="4dp"
+        android:id="@+id/menu_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</androidx.core.widget.NestedScrollView>
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>
