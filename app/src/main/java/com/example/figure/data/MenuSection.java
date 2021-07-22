@@ -7,15 +7,13 @@ import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 
 import com.example.figure.ExpandCallback;
-import com.example.figure.data.MenuItem;
 import com.example.figure.databinding.MenuSectionLayoutBinding;
 import com.example.figure.fragment.MenuFragment;
 import com.xwray.groupie.ExpandableGroup;
@@ -29,7 +27,8 @@ public class MenuSection extends BindableItem<MenuSectionLayoutBinding> implemen
     private MenuItem[] menu_items;
     ExpandCallback expandCallback;
     ExpandableGroup expandableGroup;
-
+    //FilterCallback filterCallback;
+    transient MenuSectionLayoutBinding viewBinding;
     boolean expanded;
     public MenuSection() {
     }
@@ -76,9 +75,10 @@ public class MenuSection extends BindableItem<MenuSectionLayoutBinding> implemen
         return expanded;
     }
 
-
     @Override
     public void bind(@NonNull MenuSectionLayoutBinding viewBinding, int position) {
+        //setViewBinding(viewBinding);
+        this.viewBinding = viewBinding;
         ChangeBounds changeBounds = new ChangeBounds();
 
         changeBounds.addListener(new Transition.TransitionListener() {
@@ -109,7 +109,6 @@ public class MenuSection extends BindableItem<MenuSectionLayoutBinding> implemen
         viewBinding.menuSectionName.setTypeface(MenuFragment.face);
         viewBinding.menuSectionName.setOnClickListener(v -> {
 
-
             TransitionManager.go(new Scene((ViewGroup) viewBinding.menuSectionName.getParent()), changeBounds);
 //            TransitionManager.beginDelayedTransition((ViewGroup) viewBinding.menuSectionName.getParent());
             ConstraintLayout constraintLayout = (ConstraintLayout) viewBinding.menuSectionName.getParent();
@@ -131,6 +130,7 @@ public class MenuSection extends BindableItem<MenuSectionLayoutBinding> implemen
             }
 
         });
+
     }
 
     public void setExpanded(boolean expanded) {
@@ -150,4 +150,23 @@ public class MenuSection extends BindableItem<MenuSectionLayoutBinding> implemen
     public void setExpandableGroup(@NonNull ExpandableGroup onToggleListener) {
         expandableGroup = onToggleListener;
     }
+//
+//    public MenuSectionLayoutBinding getViewBinding() {
+//        return viewBinding;
+//    }
+//
+//    public void setViewBinding(MenuSectionLayoutBinding viewBinding) {
+//        this.viewBinding = viewBinding;
+//    }
+
+    public void callExpandCallback() {
+        expandCallback.onExpandChanged(expandableGroup);
+    }
+
+    public MenuSectionLayoutBinding getViewBinding() {
+        return viewBinding;
+    }
+    //    public void setFilterCallback(FilterCallback filterCallback) {
+//        this.filterCallback = filterCallback;
+//    }
 }

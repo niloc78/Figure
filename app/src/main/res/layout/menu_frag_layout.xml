@@ -56,23 +56,91 @@
         android:layout_height="wrap_content"/>
 
 
-    <TextView
-        android:id="@+id/filler"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/restuarant_image_card"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:background="@color/white"
-        android:text="Blank Space"
-        android:textSize="38sp"
-        android:layout_below="@id/restuarant_image_card"/>
+        android:id="@+id/search_bar_pref_button_constraint_layout">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/search_bar_card"
+            android:layout_width="335dp"
+            android:layout_height="64dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/preferences_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:cardCornerRadius="6dp"
+            app:strokeColor="@color/bordergrey"
+            app:cardBackgroundColor="@color/white"
+            app:strokeWidth="1dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/search_bar_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/search_bar_icon"
+                    android:backgroundTint="@android:color/transparent"
+                    app:layout_constraintRight_toRightOf="parent"/>
+
+                <ImageView
+                    android:id="@+id/search_bar_divider"
+                    android:src="@drawable/location_search_bar_divider"
+                    app:layout_constraintRight_toLeftOf="@id/search_bar_icon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/search_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.SearchView
+                    android:background="@color/white"
+                    app:iconifiedByDefault="false"
+                    android:id="@+id/search_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:searchIcon="@null"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/search_bar_divider"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <Button
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/search_bar_card"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/preferences_button"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:background="@drawable/preferences_icon"
+            android:backgroundTint="@null"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     <ImageView
-        android:paddingTop="10dp"
         android:paddingBottom="15dp"
         android:id="@+id/divider"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/menu_divider"
-        android:layout_below="@id/filler"/>
+        android:layout_below="@id/search_bar_pref_button_constraint_layout"/>
+
 <androidx.core.widget.NestedScrollView
     android:fadeScrollbars="true"
     android:scrollbars="vertical"

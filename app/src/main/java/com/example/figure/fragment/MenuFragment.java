@@ -12,7 +12,6 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -23,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.NestedScrollView;
@@ -32,15 +32,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.figure.R;
 
-import com.example.figure.MainActivity;
+import com.example.figure.adapter.MenuGroupAdapter;
 import com.example.figure.data.MenuItem;
 import com.example.figure.data.MenuSection;
 import com.example.figure.data.Restaurant;
 import com.xwray.groupie.ExpandableGroup;
 import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.Section;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,9 +51,10 @@ public class MenuFragment extends Fragment {
     ProgressBar loading;
     RecyclerView menuRecyclerView;
     RecyclerView.LayoutManager layoutManager;
-    GroupAdapter groupAdapter;
+    MenuGroupAdapter groupAdapter;
     NestedScrollView nestedScrollView;
     public static Typeface face;
+    SearchView searchView;
     int size = 0;
     //    public IngredientFragment() {
 //        super(R.layout.ingred_frag_layout);
@@ -73,7 +72,7 @@ public class MenuFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof Activity) {
-            this.context = (MainActivity) context;
+            this.context = context;
              face = ResourcesCompat.getFont(context, R.font.josefinsans);
         }
     }
@@ -115,13 +114,29 @@ public class MenuFragment extends Fragment {
         ((TextView) view.findViewById(R.id.restaurant_name)).setText(restaurant.getRestaurant_name());
         ((TextView) view.findViewById(R.id.restaurant_name)).setTypeface((Typeface)ResourcesCompat.getFont(context, R.font.josefinsans));
         loading = (ProgressBar) view.findViewById(R.id.loading);
+        searchView = (SearchView) view.findViewById(R.id.search_view);
+        searchView.findViewById(androidx.appcompat.R.id.search_plate).setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                groupAdapter.filter(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                groupAdapter.filter(newText);
+                return true;
+            }
+        });
     }
 
     public void initMenu(View view) {
         nestedScrollView = view.findViewById(R.id.menu_nested_scroll_view);
         menuRecyclerView = view.findViewById(R.id.menu_recycler_view);
         layoutManager = new LinearLayoutManager(context);
-        groupAdapter = new GroupAdapter();
+        groupAdapter = new MenuGroupAdapter();
+        groupAdapter.setContext(context);
         menuRecyclerView.setAdapter(groupAdapter);
         menuRecyclerView.setLayoutManager(layoutManager);
         groupAdapter.addAll(generateMenuSections());
@@ -129,8 +144,7 @@ public class MenuFragment extends Fragment {
         size += groupAdapter.getItemCount();
         menuRecyclerView.setItemViewCacheSize(size);
         menuRecyclerView.setNestedScrollingEnabled(false);
-
-
+        //groupAdapter.filter("a");
 
     }
 
@@ -144,6 +158,9 @@ public class MenuFragment extends Fragment {
                     //nestedScrollView.smoothScrollTo(0, 700);
                     menuRecyclerView.postDelayed(() -> {
                         float y = menuRecyclerView.getY() + menuRecyclerView.getChildAt(groupAdapter.getAdapterPosition(eG)).getY();
+
+                        Log.d("chld count", Integer.toString(menuRecyclerView.getChildCount()));
+
                         //menuRecyclerView.scrollToPosition(groupAdapter.getAdapterPosition(eG));
                         nestedScrollView.smoothScrollTo(0, (int) y);
                     }, 0);
@@ -151,7 +168,14 @@ public class MenuFragment extends Fragment {
                     //menuRecyclerView.scrollToPosition(groupAdapter.getAdapterPosition(eG));
                 }
             });
-
+            for (MenuItem menuItem : menuSection.getMenu_items()) {
+                menuItem.setMenuItemFilterCallback(mItem -> {
+                    menuRecyclerView.post(() -> {
+                        float y = menuRecyclerView.getY() + menuRecyclerView.getChildAt(groupAdapter.getAdapterPosition(mItem)).getY();
+                        nestedScrollView.smoothScrollTo(0, (int) y);
+                    });
+                });
+            }
             Section itemsSection = new Section(Arrays.asList(menuSection.getMenu_items()));
             size += itemsSection.getItemCount();
             expandableGroup.add(itemsSection);
@@ -213,6 +237,7 @@ public class MenuFragment extends Fragment {
         endLoading();
 
     }
+
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
