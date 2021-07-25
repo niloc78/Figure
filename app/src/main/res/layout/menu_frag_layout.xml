@@ -28,7 +28,7 @@
     <ProgressBar
         android:elevation="11dp"
         android:layout_centerHorizontal="true"
-        android:layout_above="@id/restaurant_name"
+        android:layout_above="@id/clayout"
         android:layout_marginBottom="20dp"
         android:id="@+id/loading"
         android:indeterminateDrawable="@drawable/progress"
@@ -37,23 +37,53 @@
         android:indeterminate="true"
         android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/restaurant_name"
-        android:layout_alignBottom="@id/restuarant_image_card"
+    <RelativeLayout
+        android:id="@+id/clayout"
         android:layout_width="match_parent"
         android:gravity="bottom"
-        android:text="Figure Staurant"
-        android:elevation="11dp"
-        android:paddingLeft="4dp"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="17sp"
-        android:autoSizeMaxTextSize="45sp"
-        android:autoSizeStepGranularity="2sp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/restuarant_image_card"
         android:background="#40000000"
-        android:maxLines="2"
-        android:textSize="45sp"
-        android:textColor="@color/white"
-        android:layout_height="wrap_content"/>
+        android:elevation="11dp">
+
+        <TextView
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/price_level"
+            android:id="@+id/restaurant_name"
+            android:layout_width="wrap_content"
+            android:gravity="bottom"
+            android:text="Figure Staurant"
+            android:paddingLeft="4dp"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="17sp"
+            android:autoSizeMaxTextSize="45sp"
+            android:autoSizeStepGranularity="2sp"
+            android:maxLines="2"
+            android:textSize="39sp"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_alignBottom="@id/restaurant_name"
+            android:layout_alignParentRight="true"
+            android:text="$$"
+            android:id="@+id/price_level"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:gravity="bottom"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="17sp"
+            android:autoSizeMaxTextSize="39sp"
+            android:autoSizeStepGranularity="2sp"
+            android:textSize="39sp"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+    </RelativeLayout>
+
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -62,7 +62,7 @@ public class DineDeliveryPreferencesFragment extends Fragment {
     MaterialCardView searchButton;
     public static final String places_key = BuildConfig.PLACES_API_KEY;
     private Place currLocation;
-    private String price_level;
+    private String price_level = "";
     GetUrlContent mGetUrlContent;
     RestaurantModel restaurantModel;
     public static final String documenu_key = BuildConfig.DOCUMENU_API_KEY;
@@ -137,7 +137,7 @@ public class DineDeliveryPreferencesFragment extends Fragment {
             @Override
             public void notifySuccess(String requestType, JSONObject response) {
                 Log.d("restaurant response", response.toString());
-                restaurantModel.setResponse(response.toString());
+                restaurantModel.setResponse(response.toString(), getPriceLevel());
                 if (getMode().equalsIgnoreCase("Dine")) {
                     ((DineFragment) getParentFragment()).initMenuFragment();
                 }

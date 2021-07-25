@@ -1,16 +1,16 @@
 package com.example.figure.data;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+
 import com.example.figure.R;
 
 import com.example.figure.databinding.MenuItemLayoutBinding;
 import com.example.figure.fragment.MenuFragment;
-import com.example.figure.view.MenuItemFilterCallback;
+import com.example.figure.MenuItemFilterCallback;
 import com.xwray.groupie.viewbinding.BindableItem;
-
-import java.util.HashMap;
 
 public class MenuItem extends BindableItem<MenuItemLayoutBinding> {
     private String name;
@@ -54,15 +54,21 @@ public class MenuItem extends BindableItem<MenuItemLayoutBinding> {
 
     }
 
+
     @Override
     public void bind(@NonNull MenuItemLayoutBinding viewBinding, int position) {
-        this.itemBinding = viewBinding;
         viewBinding.menuItemName.setText(getName());
         viewBinding.menuItemName.setTypeface(MenuFragment.face);
         viewBinding.menuItemPrice.setText("$ " + getPrice());
         viewBinding.menuItemPrice.setTypeface(MenuFragment.face);
         viewBinding.menuItemNutrition.setText("Set menu Item Nutrition");
         viewBinding.menuItemNutrition.setTypeface(MenuFragment.face);
+        this.itemBinding = viewBinding;
+        //notifyChanged();
+
+        Log.d("settexts onbind", "called");
+
+
     }
 
     @Override
@@ -81,4 +87,7 @@ public class MenuItem extends BindableItem<MenuItemLayoutBinding> {
     public MenuItemLayoutBinding getItemBinding() {
         return itemBinding;
     }
+
+
+
 }

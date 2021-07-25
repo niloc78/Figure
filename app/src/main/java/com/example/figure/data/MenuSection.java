@@ -7,12 +7,12 @@ import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.example.figure.AnimationFinishedCallback;
 import com.example.figure.ExpandCallback;
 import com.example.figure.databinding.MenuSectionLayoutBinding;
 import com.example.figure.fragment.MenuFragment;
@@ -28,7 +28,9 @@ public class MenuSection extends BindableItem<MenuSectionLayoutBinding> implemen
     ExpandCallback expandCallback;
     ExpandableGroup expandableGroup;
     //FilterCallback filterCallback;
+    transient AnimationFinishedCallback animationFinishedCallback;
     transient MenuSectionLayoutBinding viewBinding;
+
     boolean expanded;
     public MenuSection() {
     }
@@ -92,6 +94,16 @@ public class MenuSection extends BindableItem<MenuSectionLayoutBinding> implemen
             public void onTransitionEnd(Transition transition) {
                 if (expanded == false) {
                     expandableGroup.onToggleExpanded();
+                    if (animationFinishedCallback != null) {
+                        animationFinishedCallback.onAnimationFinished();
+                    }
+//                    if (getMenu_items().length > 0) {
+//                        getMenu_items()[0].callTFilterCallBack();
+//                    }
+//                    if (filterCallBack != null) {
+//                        filterCallBack.onFilter();
+//                    }
+                    Log.d("ontoggleexpanded", "happened");
                 }
                 if (expandCallback != null) {
                     expandCallback.onExpandChanged(expandableGroup);
@@ -163,9 +175,19 @@ public class MenuSection extends BindableItem<MenuSectionLayoutBinding> implemen
         expandCallback.onExpandChanged(expandableGroup);
     }
 
+//    public void setFilterCallBack(FilterCallBack filterCallBack) {
+//        this.filterCallBack = filterCallBack;
+//    }
+
     public MenuSectionLayoutBinding getViewBinding() {
         return viewBinding;
     }
+
+    public void setAnimationFinishedCallback(AnimationFinishedCallback animationFinishedCallback) {
+        this.animationFinishedCallback = animationFinishedCallback;
+    }
+
+
     //    public void setFilterCallback(FilterCallback filterCallback) {
 //        this.filterCallback = filterCallback;
 //    }

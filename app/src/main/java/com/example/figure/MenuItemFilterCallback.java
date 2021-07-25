@@ -1,4 +1,4 @@
-package com.example.figure.view;
+package com.example.figure;
 
 import com.example.figure.data.MenuItem;
 

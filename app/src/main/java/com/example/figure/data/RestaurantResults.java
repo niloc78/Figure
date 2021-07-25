@@ -1,5 +1,13 @@
 package com.example.figure.data;
 
+import com.example.figure.R;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 public class RestaurantResults {
     private int totalResults;
     private int page;
@@ -50,5 +58,27 @@ public class RestaurantResults {
 
     public void setTotalResults(int totalResults) {
         this.totalResults = totalResults;
+    }
+
+    public void filterByPriceLevel(String priceLevel) {
+        if (!priceLevel.isEmpty()) {
+            List<Restaurant> restaurants = new LinkedList<>(Arrays.asList(data));
+            Iterator<Restaurant> iter = restaurants.iterator();
+            while (iter.hasNext()) {
+                if (!((Restaurant)iter.next()).getPrice_range().equalsIgnoreCase(priceLevel)) {
+                    iter.remove();
+                }
+            }
+//            for (Restaurant restaurant : restaurants) {
+//                if (!restaurant.getPrice_range().equalsIgnoreCase(priceLevel)) {
+//                    restaurants.remove(restaurant);
+//                }
+//            }
+            if (restaurants.size() > 0) {
+                this.data = restaurants.toArray(new Restaurant[0]);
+            }
+        }
+
+
     }
 }

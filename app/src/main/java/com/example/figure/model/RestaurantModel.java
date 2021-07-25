@@ -17,10 +17,12 @@ import java.util.Random;
 
 public class RestaurantModel extends ViewModel {
     private final MutableLiveData<String> response = new MutableLiveData<String>();
+    private final MutableLiveData<String> priceLevel = new MutableLiveData<String>();
     private final MutableLiveData<RestaurantResults> restaurantResults = new MutableLiveData<RestaurantResults>();
 
-    public void setResponse(String resp) { // 0 is response body, 1 is ingreds
+    public void setResponse(String resp, String priceLevel) { // 0 is response body, 1 is ingreds
         response.setValue(resp);
+        this.priceLevel.setValue(priceLevel);
         restaurantResults.setValue(createResultObject());
     }
     public LiveData getResponse() {
@@ -28,10 +30,16 @@ public class RestaurantModel extends ViewModel {
     }
     //choose random restaurant: create RestaurantResults, Restaurant, Menu,
 
+
+    public LiveData getPriceLevel() {
+        return priceLevel;
+    }
+
     public RestaurantResults createResultObject() {
         Gson objectMapper = new Gson();
 
         RestaurantResults restaurantResults = objectMapper.fromJson((String) getResponse().getValue(), RestaurantResults.class);
+        restaurantResults.filterByPriceLevel((String)getPriceLevel().getValue());
         return restaurantResults;
     }
 
@@ -43,6 +51,8 @@ public class RestaurantModel extends ViewModel {
         //Log.d("Test restaurant name", restaurant.getRestaurant_name());
         return result.getData()[(new Random()).nextInt(result.getData().length)];
     }
+
+
 
 
 

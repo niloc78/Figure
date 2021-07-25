@@ -13,11 +13,13 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -53,6 +55,7 @@ public class MenuFragment extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     MenuGroupAdapter groupAdapter;
     NestedScrollView nestedScrollView;
+    ImageButton searchBarIcon;
     public static Typeface face;
     SearchView searchView;
     int size = 0;
@@ -119,16 +122,27 @@ public class MenuFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                groupAdapter.filter(query);
+                if (!query.isEmpty()) {
+                    groupAdapter.findNext();
+                }
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
+                Log.d("onquerytextchange", "called");
                 groupAdapter.filter(newText);
                 return true;
             }
         });
+        searchBarIcon = (ImageButton) view.findViewById(R.id.search_bar_icon);
+
+        searchBarIcon.setOnClickListener(v-> {
+            searchView.setQuery(searchView.getQuery(), true);
+        });
+        ((TextView) view.findViewById(R.id.price_level)).setText(restaurant.getPrice_range());
+        ((TextView) view.findViewById(R.id.price_level)).setTypeface(face);
     }
 
     public void initMenu(View view) {
@@ -136,14 +150,20 @@ public class MenuFragment extends Fragment {
         menuRecyclerView = view.findViewById(R.id.menu_recycler_view);
         layoutManager = new LinearLayoutManager(context);
         groupAdapter = new MenuGroupAdapter();
+        groupAdapter.initializeFilteredList();
         groupAdapter.setContext(context);
         menuRecyclerView.setAdapter(groupAdapter);
         menuRecyclerView.setLayoutManager(layoutManager);
         groupAdapter.addAll(generateMenuSections());
+//        groupAdapter.setFilterCallBack(text -> {
+//            groupAdapter.filter(text);
+//            Log.d("filter", "happened");
+//        });
         menuRecyclerView.setItemViewCacheSize(groupAdapter.getItemCount());
         size += groupAdapter.getItemCount();
         menuRecyclerView.setItemViewCacheSize(size);
         menuRecyclerView.setNestedScrollingEnabled(false);
+
         //groupAdapter.filter("a");
 
     }
@@ -152,8 +172,14 @@ public class MenuFragment extends Fragment {
         ArrayList<ExpandableGroup> expandableGroups = new ArrayList<ExpandableGroup>();
         for (MenuSection menuSection : restaurant.getMenus()[0].getMenu_sections()) {
             ExpandableGroup expandableGroup = new ExpandableGroup(menuSection, false);
+
+            menuSection.setAnimationFinishedCallback( () -> {
+                changeAdapterData();
+            });
+
             menuSection.setExpandCallback(eG -> {
                 if (eG.isExpanded()) {
+                    //searchView.setQuery(searchView.getQuery(), false);
                     Log.d("expandedd called", "callback called");
                     //nestedScrollView.smoothScrollTo(0, 700);
                     menuRecyclerView.postDelayed(() -> {
@@ -168,18 +194,38 @@ public class MenuFragment extends Fragment {
                     //menuRecyclerView.scrollToPosition(groupAdapter.getAdapterPosition(eG));
                 }
             });
+//            menuSection.setFilterCallBack(() -> {
+//                if (!groupAdapter.getT().isEmpty() && (groupAdapter.getT() != null)) {
+//                    groupAdapter.filter(groupAdapter.getT());
+//                }
+//            });
+
             for (MenuItem menuItem : menuSection.getMenu_items()) {
                 menuItem.setMenuItemFilterCallback(mItem -> {
-                    menuRecyclerView.post(() -> {
-                        float y = menuRecyclerView.getY() + menuRecyclerView.getChildAt(groupAdapter.getAdapterPosition(mItem)).getY();
-                        nestedScrollView.smoothScrollTo(0, (int) y);
-                    });
+                    if (menuRecyclerView.getChildAt(groupAdapter.getAdapterPosition(mItem)) == null) {
+                        groupAdapter.filter(searchView.getQuery().toString());
+                    } else {
+                        menuRecyclerView.post(() -> {
+                            float y = menuRecyclerView.getY() + menuRecyclerView.getChildAt(groupAdapter.getAdapterPosition(mItem)).getY();
+                            nestedScrollView.smoothScrollTo(0, (int) y);
+                        });
+
+                    }
                 });
+
+//                menuItem.setFilterCallBack(() -> {
+//                    if (!groupAdapter.getT() .isEmpty() && (groupAdapter.getT() != null)) {
+//                        groupAdapter.filter(groupAdapter.getT());
+//                    }
+//                });
             }
             Section itemsSection = new Section(Arrays.asList(menuSection.getMenu_items()));
             size += itemsSection.getItemCount();
             expandableGroup.add(itemsSection);
+            //Log.d("expand child size", Integer.toString(expandableGroup.getGroup(0).getItem(0).getItemCount()));
+            //Log.d("expand item size", Integer.toString(expandableGroup.getItemCount()));
             expandableGroups.add(expandableGroup);
+
         }
         return expandableGroups;
     }
@@ -248,5 +294,23 @@ public class MenuFragment extends Fragment {
     }
     public void endLoading() {
         loading.setVisibility(View.GONE);
+    }
+
+    void changeAdapterData() {
+        new Handler().post(waitForAnimationsToFinishRunnable);
+    }
+    private Runnable waitForAnimationsToFinishRunnable = () -> waitForAnimationsToFinish();
+    private void waitForAnimationsToFinish() {
+        if (menuRecyclerView.isAnimating()) {
+            menuRecyclerView.getItemAnimator().isRunning(animationFinishedListener);
+            return;
+        }
+        onRecyclerViewAnimationsFinished();
+    }
+    private RecyclerView.ItemAnimator.ItemAnimatorFinishedListener animationFinishedListener = () -> new Handler().post(waitForAnimationsToFinishRunnable);
+    private void onRecyclerViewAnimationsFinished() {
+        if (!groupAdapter.getT().isEmpty() && (groupAdapter.getT() != null)) {
+        groupAdapter.filter(groupAdapter.getT());
+        }
     }
 }
