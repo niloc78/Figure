@@ -63,11 +63,9 @@ public class CookPreferencesFragment extends Fragment {
 
         if (cuisineTypeRecyclerView == null) {
             initRecyclerViews(view);
-            ((ImageButton) view.findViewById(R.id.cook_pref_back_button)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((CookFragment) getParentFragment()).getSheetBehavior().setState(BottomSheetBehavior.STATE_HIDDEN);
-                    ((MainFragment)getParentFragment().getParentFragment()).mainSideBarIcon.setVisibility(View.VISIBLE);
+            ((ImageButton) view.findViewById(R.id.cook_pref_back_button)).setOnClickListener((View.OnClickListener) v -> {
+                ((CookFragment) getParentFragment()).getSheetBehavior().setState(BottomSheetBehavior.STATE_HIDDEN);
+                ((MainFragment)getParentFragment().getParentFragment()).mainSideBarIcon.setVisibility(View.VISIBLE);
 
 //                    scrim.setOnClickListener(new View.OnClickListener() {
 //                        @Override
@@ -79,7 +77,6 @@ public class CookPreferencesFragment extends Fragment {
 //                        }
 //                    });
 //                    scrim.setClickable(false);
-                }
             });
 
         }

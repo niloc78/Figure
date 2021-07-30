@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import com.example.figure.fragment.CookFragment;
 import com.example.figure.fragment.DeliveryFragment;
 import com.example.figure.fragment.DineFragment;
+import com.example.figure.fragment.ProfileFragment;
 
 public class ModePagerAdapter extends FragmentStatePagerAdapter {
     int numTabs;
@@ -30,6 +31,9 @@ public class ModePagerAdapter extends FragmentStatePagerAdapter {
             case 2:
                 DeliveryFragment deliveryFrag = new DeliveryFragment();
                 return deliveryFrag;
+            case 3:
+                ProfileFragment profileFragment = new ProfileFragment();
+                return profileFragment;
             default:
                 return null;
         }

@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Figure</string>
+    <string name="dont_have_account_sign_up">
+        <font color="#707070">Don\'t have an account? </font><font color="#F97E7E"><b>Sign Up</b></font>
+    </string>
+    <string name="already_have_an_account_login">
+        <font color="#707070">Already have an account? </font><font color="#F97E7E"><b>Log in</b></font>
+    </string>
 </resources>

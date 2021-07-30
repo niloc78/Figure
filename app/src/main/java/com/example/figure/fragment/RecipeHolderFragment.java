@@ -69,19 +69,17 @@ public class RecipeHolderFragment extends Fragment {
                 });
             }
 
-            getParentFragmentManager().setFragmentResultListener("recipesLoaded", this, new FragmentResultListener() {
-                @Override
-                public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+            getParentFragmentManager().setFragmentResultListener("recipesLoaded", this, (requestKey, result) -> {
 //                    RecipeModel recipeModel = new ViewModelProvider(requireActivity()).get(RecipeModel.class);
 //                    recipeData = recipeModel.sort();
 //                    adapter = new RecipePagerAdapter(getActivity(), recipeData);
 //                    recipePager.setAdapter(adapter);
-                    recipesLoaded = result.getBoolean("loaded");
-                    if (recipesLoaded) {
-                        initRecipePager(view);
-                    } else {
-                        unload();
-                    }
+                recipesLoaded = result.getBoolean("loaded");
+                if (recipesLoaded) {
+                    initRecipePager(view);
+                } else {
+                    unload();
+                }
 
 
 //                    recipesLoaded = result.getBoolean("loaded");
@@ -90,7 +88,6 @@ public class RecipeHolderFragment extends Fragment {
 //                    recipeData = recipeModel.sort();
 //                    Log.d("test recipe callback", recipeData.get(0).getRecipeName());
 //                    adapter.notifyDataSetChanged();
-                }
             });
 
     }
@@ -135,11 +132,7 @@ public class RecipeHolderFragment extends Fragment {
         }
 
 
-        new TabLayoutMediator(tabLayout, recipePager, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-
-            }
+        new TabLayoutMediator(tabLayout, recipePager, (tab, position) -> {
         }).attach();
     }
 

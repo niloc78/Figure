@@ -155,6 +155,10 @@ public class DineFragment extends Fragment {
 
     }
 
+    public Button getPrefButton() {
+        return prefButton;
+    }
+
     private IResult placeCallBack() {
         return new IResult() {
             @Override

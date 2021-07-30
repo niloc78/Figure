@@ -34,6 +34,7 @@ import com.example.figure.model.RecipeModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -92,15 +93,12 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
             initRecyclerView(view);
 
         ((ImageButton) view.findViewById(R.id.cook_pref_button)).bringToFront();
-        ((ImageButton) view.findViewById(R.id.cook_pref_button)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((CookFragment) getParentFragment()).sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                ((MainFragment) getParentFragment().getParentFragment()).mainSideBarIcon.setVisibility(View.GONE);
+        ((ImageButton) view.findViewById(R.id.cook_pref_button)).setOnClickListener((View.OnClickListener) v -> {
+            ((CookFragment) getParentFragment()).sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            ((MainFragment) getParentFragment().getParentFragment()).mainSideBarIcon.setVisibility(View.GONE);
 //                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 //                scrim.setClickable(true);
 //                scrim.setBackgroundColor(ContextCompat.getColor(context, R.color.main_pink_alpha));
-            }
         });
 
         mGetUrlContent = new GetUrlContent(constrIResultCallback(), context);
@@ -112,17 +110,24 @@ public class IngredientFragment extends Fragment implements AddIngredientDialog.
         return new IResult() {
             @Override
             public void notifySuccess(String requestType, JSONObject response) {
-                Log.d("Recipe api response", response.toString());;
-                //recipeModel = new ViewModelProvider(requireActivity()).get(RecipeModel.class);
-                recipeModel.setResponse(response.toString());
-                //pass ingreds to model?
-                //test gson map
-                recipeModel.setIngredients(ingredData.toArray(new String[ingredData.size()]));
-                //recipeModel.sort();
-                //pass to viewmodel here
-                Bundle result = new Bundle();
-                result.putBoolean("loaded", true);
-                getParentFragmentManager().setFragmentResult("recipesLoaded", result);
+
+                try {
+                    if (response.getInt("count") != 0) {
+                        Log.d("Recipe api response", response.toString());;
+                        //recipeModel = new ViewModelProvider(requireActivity()).get(RecipeModel.class);
+                        recipeModel.setResponse(response.toString());
+                        //pass ingreds to model?
+                        //test gson map
+                        recipeModel.setIngredients(ingredData.toArray(new String[ingredData.size()]));
+                        //recipeModel.sort();
+                        //pass to viewmodel here
+                        Bundle result = new Bundle();
+                        result.putBoolean("loaded", true);
+                        getParentFragmentManager().setFragmentResult("recipesLoaded", result);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
 
             }

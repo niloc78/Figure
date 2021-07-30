@@ -76,18 +76,8 @@ public class CookFragment extends Fragment {
         cookPager = (CustomViewPager) view.findViewById(R.id.cook_pager);
         final CookPagerAdapter adapter = new CookPagerAdapter(getChildFragmentManager(), 2);
         cookPager.setAdapter(adapter);
-        cookPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-        cookPager.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                return true;
-            }
-        });
+        cookPager.setOnTouchListener((v, event) -> true);
+        cookPager.setOnDragListener((v, event) -> true);
         cookPager.requestDisallowInterceptTouchEvent(true);
 
         cookTabLayout = (TabLayout) view.findViewById(R.id.cook_tab_layout);

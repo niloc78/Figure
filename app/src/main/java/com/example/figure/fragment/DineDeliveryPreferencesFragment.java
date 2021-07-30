@@ -228,18 +228,15 @@ public class DineDeliveryPreferencesFragment extends Fragment {
         ((RadioButton) view.findViewById(R.id.rad3)).setTypeface(face);
         ((TextView) view.findViewById(R.id.update_preferences)).setTypeface(face);
         priceRadioGroup = (RadioGroup) view.findViewById(R.id.price_radio_group);
-        priceRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                Log.d("checked id: ", Integer.toString(checkedId));
-                if (checkedId == -1) {
-                    price_level = "";
-                } else {
-                    price_level = ((RadioButton) group.findViewById(checkedId)).getText().toString();
-                }
-
-                Log.d("price level: ", price_level);
+        priceRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            Log.d("checked id: ", Integer.toString(checkedId));
+            if (checkedId == -1) {
+                price_level = "";
+            } else {
+                price_level = ((RadioButton) group.findViewById(checkedId)).getText().toString();
             }
+
+            Log.d("price level: ", price_level);
         });
         searchButton = (MaterialCardView) view.findViewById(R.id.update_preferences_card_view);
         searchButton.setOnClickListener(v -> {

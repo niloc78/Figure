@@ -80,12 +80,9 @@ public class DeliveryFragment extends Fragment {
         colorFrom = ContextCompat.getColor(context, R.color.black);
         colorTo = ContextCompat.getColor(context, R.color.main_pink);
         colorAnim = ValueAnimator.ofArgb(colorFrom, colorTo);
-        colorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    prefButton.setBackgroundTintList(ColorStateList.valueOf((int)animation.getAnimatedValue()));
-                }
+        colorAnim.addUpdateListener(animation -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                prefButton.setBackgroundTintList(ColorStateList.valueOf((int)animation.getAnimatedValue()));
             }
         });
         colorAnim.setDuration(900);

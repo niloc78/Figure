@@ -107,4 +107,20 @@
         <item name="android:fontFamily">@font/josefinsans</item>
     </style>
 
+    <style name="dialogCardStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/dialogOverlay</item>
+    </style>
+    <style name="dialogOverlay" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeBottomLeft">41dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+    <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/white</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

@@ -8,10 +8,6 @@
             android:id="@+id/profile_menu_item"
             android:title="Profile"
             android:icon="@drawable/profile_button"/>
-        <item
-            android:id="@+id/fitness_menu_item"
-            android:title="Fitness"
-            android:icon="@drawable/fitness_icon_unselected"/>
     </group>
 
 </menu>

@@ -1,9 +1,13 @@
 package com.example.figure.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -12,13 +16,19 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.animation.AccelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -57,7 +67,17 @@ public class MenuFragment extends Fragment {
     NestedScrollView nestedScrollView;
     ImageButton searchBarIcon;
     public static Typeface face;
+    View clayout;
+    View dialogCard;
+    View dialogView;
+    Dialog dialog;
+    ImageButton infoButton;
     SearchView searchView;
+    int cx;
+    int cy;
+    int endRadius = 0;
+    Animator revealAnimator;
+    Animator exitAnimator;
     int size = 0;
     //    public IngredientFragment() {
 //        super(R.layout.ingred_frag_layout);
@@ -97,6 +117,7 @@ public class MenuFragment extends Fragment {
             initViews(view);
             beginLoading();
             initMenu(view);
+            initInfoDialog();
         }
 
     }
@@ -107,12 +128,127 @@ public class MenuFragment extends Fragment {
         this.context = null;
     }
 
+    public void initInfoDialog() {
+        dialogView = View.inflate(context, R.layout.info_dialog, null);
+        dialog = new Dialog(context, R.style.MyAlertDialogStyle);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(dialogView);
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialogView.findViewById(R.id.dialogback).setOnClickListener( v-> {
+            revealShow(false);
+        });
+
+        ((TextView) dialogView.findViewById(R.id.rest_name)).setText(restaurant.getRestaurant_name());
+        ((TextView) dialogView.findViewById(R.id.rest_name)).setTypeface(face);
+
+        ((TextView) dialogView.findViewById(R.id.address)).setText(restaurant.getAddress().get("street"));
+        ((TextView) dialogView.findViewById(R.id.address)).setTypeface(face);
+
+        ((TextView) dialogView.findViewById(R.id.phone)).setText(restaurant.getRestaurant_phone());
+        ((TextView) dialogView.findViewById(R.id.phone)).setTypeface(face);
+
+        ((TextView) dialogView.findViewById(R.id.website)).setText(restaurant.getRestaurant_website());
+        ((TextView) dialogView.findViewById(R.id.website)).setTypeface(face);
+        dialog.setOnShowListener(dialogInterface -> {
+            dialogView.post(revealAnimationRunnable);
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogCard = dialogView.findViewById(R.id.dialogcard);
+
+//        int[] location = new int[2];
+//        infoButton.getLocationOnScreen(location);
+//        int y = location[1];
+//
+//        dialogCard.setY(y - infoButton.getHeight());
+//
+//        int w = dialogCard.getWidth();
+//        int h = dialogCard.getHeight();
+//
+//        endRadius = (int) Math.hypot(w, h);
+//
+//        cx = (int) (infoButton.getX() + (infoButton.getWidth()/2));
+//        cy = (int) 0;
+
+//        revealAnimator = ViewAnimationUtils.createCircularReveal(dialogCard, cx, cy, 0, endRadius);
+//        revealAnimator.setDuration(350);
+//        exitAnimator = ViewAnimationUtils.createCircularReveal(dialogCard, cx, cy, endRadius, 0);
+
+    }
+
+    public void showDialog() {
+        dialog.show();
+    }
+
+
+
+    private final Runnable revealAnimationRunnable = new Runnable() {
+        @Override
+        public void run() {
+            revealShow(true);
+        }
+    };
+
+    public void revealShow(boolean b) {
+        if (endRadius == 0) {
+            int[] location = new int[2];
+            infoButton.getLocationOnScreen(location);
+            int y = location[1];
+//              int y = (int) infoButton.getY();
+
+              //int diff = ((int)clayout.getY() - (clayout.getHeight()/2)) - ((int)clayout.getY() - (dialogCard.getHeight()/2));
+
+
+            dialogCard.setY(y - (infoButton.getHeight()));
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                dialogCard.setY(y - (infoButton.getHeight()*2) - 5);
+            }
+
+            int w = dialogCard.getWidth();
+            int h = dialogCard.getHeight();
+
+            endRadius = (int) Math.hypot(w, h);
+
+            cx = (int) (infoButton.getX() + (infoButton.getWidth()/2));
+            cy = (int) 0;
+        }
+
+        if (b) {
+            revealAnimator = ViewAnimationUtils.createCircularReveal(dialogCard, cx, cy, 0, endRadius);
+            revealAnimator.setDuration(350);
+            revealAnimator.setInterpolator(new AccelerateInterpolator());
+            dialogCard.setVisibility(View.VISIBLE);
+            revealAnimator.start();
+        } else {
+
+            exitAnimator = ViewAnimationUtils.createCircularReveal(dialogCard, cx, cy, endRadius, 0);
+            exitAnimator.setDuration(350);
+            exitAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    dialog.dismiss();
+                    dialogCard.setVisibility(View.INVISIBLE);
+                }
+            });
+
+            exitAnimator.start();
+        }
+    }
+
     @Override
     public String toString () {
         return "menuFragment";
     }
     public void initViews(View view) {
         restaurantImage = (ImageView) view.findViewById(R.id.restaurant_image_view);
+
+        infoButton = (ImageButton) view.findViewById(R.id.info_button);
+        infoButton.setOnClickListener( v-> {
+            showDialog();
+        });
+        clayout = view.findViewById(R.id.clayout);
 
         ((TextView) view.findViewById(R.id.restaurant_name)).setText(restaurant.getRestaurant_name());
         ((TextView) view.findViewById(R.id.restaurant_name)).setTypeface((Typeface)ResourcesCompat.getFont(context, R.font.josefinsans));
@@ -141,8 +277,11 @@ public class MenuFragment extends Fragment {
         searchBarIcon.setOnClickListener(v-> {
             searchView.setQuery(searchView.getQuery(), true);
         });
-        ((TextView) view.findViewById(R.id.price_level)).setText(restaurant.getPrice_range());
-        ((TextView) view.findViewById(R.id.price_level)).setTypeface(face);
+
+        ((Button) view.findViewById(R.id.preferences_button)).setOnClickListener( v-> {
+            ((DineFragment) getParentFragment()).getPrefButton().performClick();
+        });
+
     }
 
     public void initMenu(View view) {
