@@ -188,12 +188,7 @@ public class DineDeliveryPreferencesFragment extends Fragment {
 
         locationSearchBarButton = (ImageButton) view.findViewById(R.id.location_search_bar_button);
         locationSearchBarButton.setOnClickListener(v -> {
-            root.post(new Runnable() {
-                @Override
-                public void run() {
-                    root.findViewById(R.id.places_autocomplete_search_input).performClick();
-                }
-            });
+            root.post(() -> root.findViewById(R.id.places_autocomplete_search_input).performClick());
         });
 
         //autocompleteSupportFragment.setMenuVisibility(false);

@@ -68,8 +68,8 @@ public class MenuGroupAdapter extends GroupAdapter {
 
     public void filter(String text) {
         this.t = text;
+        filteredList.clear();
         if (text.isEmpty()) {
-            filteredList.clear();
             for (int i = 0; i<= getItemCount() - 1; i++) { // menusection type
                 if (getItem(i) instanceof MenuSection) {
                     MenuSectionLayoutBinding viewBinding = ((MenuSection) getItem(i)).getViewBinding();
@@ -83,18 +83,15 @@ public class MenuGroupAdapter extends GroupAdapter {
 
             }
         } else {
-            filteredList.clear();
             for (int i = 0; i<= getItemCount() - 1; i++) { // menusection type
                 if (getItem(i) instanceof MenuSection) {
                     MenuSection menuSection = (MenuSection) getItem(i);
                     MenuSectionLayoutBinding viewBinding = menuSection.getViewBinding();
                     String sectionText = viewBinding.menuSectionName.getText().toString();
                     if (sectionText.toLowerCase().contains(text.toLowerCase())) {
-
                         if (!filteredList.contains(menuSection)) {
                             filteredList.add(menuSection);
                         }
-
                         if (sectionText.equalsIgnoreCase(text)) {
                             menuSection.callExpandCallback();
                             if (!menuSection.getExpandableGroup().isExpanded()) {
@@ -104,10 +101,6 @@ public class MenuGroupAdapter extends GroupAdapter {
                         String newString = sectionText.replaceAll("(?i)"+text, "<font color='#F5C4C4'>"+"$0"+"</font>");
                         viewBinding.menuSectionName.setText(Html.fromHtml(newString));
                     } else {
-//                        if (filteredList.contains(menuSection)) {
-//                            filteredList.remove(menuSection);
-//                        }
-
                         viewBinding.menuSectionName.setText(sectionText);
                     }
                 } else if (getItem(i) instanceof MenuItem) {
@@ -128,9 +121,6 @@ public class MenuGroupAdapter extends GroupAdapter {
                         iBinding.menuItemName.setText(Html.fromHtml(newString));
                         Log.d("if block call", "called " + newString);
                     } else {
-//                        if (filteredList.contains(menuItem)) {
-//                            filteredList.remove(menuItem);
-//                        }
                         iBinding.menuItemName.setText(itemText);
                         Log.d("else block call", "called " + itemText);
                     }

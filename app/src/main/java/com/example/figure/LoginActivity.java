@@ -34,15 +34,39 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_start);
         initScenes();
+        initStartButtons();
+        currScene = StartScene.START;
 
+    }
+
+    public void initStartButtons() {
         findViewById(R.id.login_button).setOnClickListener(v -> {
             toLogin();
         });
         findViewById(R.id.dont_have_an_account_sign_up).setOnClickListener(v -> {
             toRegister();
         });
-        currScene = StartScene.START;
+        findViewById(R.id.skip_button).setOnClickListener(v -> {
 
+        });
+    }
+    public void initLoginButtons() {
+        findViewById(R.id.dont_have_an_account_sign_up).setOnClickListener( v-> {
+            toRegister();
+        });
+        //add login function
+        findViewById(R.id.login_button).setOnClickListener(v -> {
+
+        });
+    }
+    public void initRegisterButtons() {
+        findViewById(R.id.already_have_an_account_login).setOnClickListener( v-> {
+            toLogin();
+        });
+        //add register function
+        findViewById(R.id.register_button).setOnClickListener(v -> {
+
+        });
     }
 
 
@@ -64,22 +88,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onTransitionEnd(@NonNull Transition transition) {
                 if (currScene == StartScene.LOGIN) {
                     Log.d("ended", "login");
-                    findViewById(R.id.dont_have_an_account_sign_up).setOnClickListener( v-> {
-                        toRegister();
-                    });
+                    initLoginButtons();
                 } else if (currScene == StartScene.REGISTER) {
                     Log.d("ended", "register");
-                    findViewById(R.id.already_have_an_account_login).setOnClickListener( v-> {
-                        toLogin();
-                    });
+                    initRegisterButtons();
 
                 } else if (currScene == StartScene.START) {
-                    findViewById(R.id.login_button).setOnClickListener(v -> {
-                        toLogin();
-                    });
-                    findViewById(R.id.dont_have_an_account_sign_up).setOnClickListener(v -> {
-                        toRegister();
-                    });
+                    initStartButtons();
 
                 }
 
