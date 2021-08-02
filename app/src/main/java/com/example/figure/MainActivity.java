@@ -101,6 +101,8 @@ public class MainActivity extends FragmentActivity implements FragmentChangeList
     }
 
 
+
+
     @Override
     public void replaceFragment(Fragment fragment) {
 //        FragmentManager fragmentManager = getSupportFragmentManager();

@@ -36,7 +36,7 @@ public class MainFragment extends Fragment {
     FragmentManager childFragmentManager;
     public ImageButton mainSideBarIcon;
     public static CustomViewPager modePager;
-
+    int currPage;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,27 +111,9 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                if (position == 0) {
-                    ((MainActivity)context).colorFrom = ((MainActivity)context).getWindow().getStatusBarColor();
-                    ((MainActivity)context).colorTo = ContextCompat.getColor(context, R.color.cook_orange);
 
-                    ((MainActivity)context).colorAnim.setIntValues(((MainActivity)context).colorFrom, ((MainActivity)context).colorTo);
-                    ((MainActivity)context).colorAnim.start();
-                } else if (position == 1) {
-                    ((MainActivity)context).colorFrom = ((MainActivity)context).getWindow().getStatusBarColor();
-                    ((MainActivity)context).colorTo = ContextCompat.getColor(context, R.color.dine_blue);
+                currPage = position == 0 ? toCook() : position == 1 ? toDine() : position == 2 ? toDelivery() : toProfile();
 
-                    ((MainActivity)context).colorAnim.setIntValues(((MainActivity)context).colorFrom, ((MainActivity)context).colorTo);
-                    ((MainActivity)context).colorAnim.start();
-
-                } else if (position == 2) {
-                    ((MainActivity)context).colorFrom = ((MainActivity)context).getWindow().getStatusBarColor();
-                    ((MainActivity)context).colorTo = ContextCompat.getColor(context, R.color.delivery_green);
-
-                    ((MainActivity)context).colorAnim.setIntValues(((MainActivity)context).colorFrom, ((MainActivity)context).colorTo);
-                    ((MainActivity)context).colorAnim.start();
-
-                }
             }
 
             @Override
@@ -140,6 +122,38 @@ public class MainFragment extends Fragment {
             }
         });
 
+    }
+
+    public int toCook() {
+        ((MainActivity)context).colorFrom = ((MainActivity)context).getWindow().getStatusBarColor();
+        ((MainActivity)context).colorTo = ContextCompat.getColor(context, R.color.cook_orange);
+
+        ((MainActivity)context).colorAnim.setIntValues(((MainActivity)context).colorFrom, ((MainActivity)context).colorTo);
+        ((MainActivity)context).colorAnim.start();
+       return 0;
+    }
+    public int toDine() {
+        ((MainActivity)context).colorFrom = ((MainActivity)context).getWindow().getStatusBarColor();
+        ((MainActivity)context).colorTo = ContextCompat.getColor(context, R.color.dine_blue);
+
+        ((MainActivity)context).colorAnim.setIntValues(((MainActivity)context).colorFrom, ((MainActivity)context).colorTo);
+        ((MainActivity)context).colorAnim.start();
+        return 1;
+    }
+    public int toDelivery() {
+        ((MainActivity)context).colorFrom = ((MainActivity)context).getWindow().getStatusBarColor();
+        ((MainActivity)context).colorTo = ContextCompat.getColor(context, R.color.delivery_green);
+
+        ((MainActivity)context).colorAnim.setIntValues(((MainActivity)context).colorFrom, ((MainActivity)context).colorTo);
+        ((MainActivity)context).colorAnim.start();
+        return 2;
+    }
+    public int toProfile() {
+        ((MainActivity)context).colorFrom = ((MainActivity)context).getWindow().getStatusBarColor();
+        ((MainActivity)context).colorTo = ContextCompat.getColor(context, R.color.main_pink);
+        ((MainActivity)context).colorAnim.setIntValues(((MainActivity)context).colorFrom, ((MainActivity)context).colorTo);
+        ((MainActivity)context).colorAnim.start();
+        return 3;
     }
 
     @Override
@@ -197,6 +211,8 @@ public class MainFragment extends Fragment {
             if (item.isChecked()) {}
             else {
                 sideBar.getMenu().getItem(0).setChecked(false);
+                sideBar.getMenu().getItem(1).setChecked(false);
+                sideBar.getMenu().getItem(2).setChecked(false);
                 item.setChecked(!item.isChecked());
                 modePager.setCurrentItem(3);
             }

@@ -84,15 +84,8 @@ public class DineDeliveryPreferencesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (_rootView == null) {
             _rootView = inflater.inflate(R.layout.dine_delivery_preferences_layout, container, false);
-            if (getParentFragment() instanceof DineFragment) {
 
-                mode = "Dine";
-                Log.d(mode + " preferences created", "created");
-
-            } else if (getParentFragment() instanceof DeliveryFragment) {
-                mode = "Delivery";
-                Log.d(mode + " preferences created", "created");
-            }
+            mode = getParentFragment() instanceof  DineFragment ? "Dine" : "Delivery";
 
         }
         return _rootView;
@@ -225,11 +218,8 @@ public class DineDeliveryPreferencesFragment extends Fragment {
         priceRadioGroup = (RadioGroup) view.findViewById(R.id.price_radio_group);
         priceRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             Log.d("checked id: ", Integer.toString(checkedId));
-            if (checkedId == -1) {
-                price_level = "";
-            } else {
-                price_level = ((RadioButton) group.findViewById(checkedId)).getText().toString();
-            }
+
+            price_level = checkedId == -1 ? "" : ((RadioButton) group.findViewById(checkedId)).getText().toString();
 
             Log.d("price level: ", price_level);
         });

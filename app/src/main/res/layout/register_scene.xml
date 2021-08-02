@@ -90,6 +90,7 @@
                     android:layout_marginLeft="8dp"/>
 
                 <EditText
+                    android:id="@+id/register_name_field"
                     android:background="@null"
                     android:gravity="left|center_vertical"
                     android:hint="First Name"
@@ -102,6 +103,13 @@
 
 
         </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/invalid_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/fabpink"
+            android:textSize="10sp"/>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_marginBottom="5dp"
@@ -128,6 +136,7 @@
                     android:layout_marginLeft="8dp"/>
 
                 <EditText
+                    android:id="@+id/register_email_field"
                     android:background="@null"
                     android:hint="E-mail"
                     android:gravity="left|center_vertical"
@@ -140,6 +149,13 @@
             </RelativeLayout>
 
         </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/invalid_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/fabpink"
+            android:textSize="10sp"/>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_marginBottom="5dp"
@@ -166,8 +182,11 @@
                     android:layout_marginLeft="8dp"/>
 
                 <EditText
+                    android:id="@+id/register_password_field"
                     android:background="@null"
                     android:hint="Password"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
                     android:gravity="left|center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -178,6 +197,13 @@
             </RelativeLayout>
 
         </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/invalid_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/fabpink"
+            android:textSize="10sp"/>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_marginTop="5dp"
@@ -203,7 +229,11 @@
                     android:layout_marginLeft="8dp"/>
 
                 <EditText
+                    android:id="@+id/register_confirm_password_field"
                     android:background="@null"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:maxLength="20"
                     android:hint="Confirm Password"
                     android:gravity="left|center_vertical"
                     android:layout_width="match_parent"
@@ -215,6 +245,13 @@
             </RelativeLayout>
 
         </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/invalid_confirmpassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/fabpink"
+            android:textSize="10sp"/>
 
 
     </LinearLayout>

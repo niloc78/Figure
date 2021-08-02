@@ -98,7 +98,7 @@ public class MenuGroupAdapter extends GroupAdapter {
                                 viewBinding.menuSectionName.performClick();
                             }
                         }
-                        String newString = sectionText.replaceAll("(?i)"+text, "<font color='#F5C4C4'>"+"$0"+"</font>");
+                        String newString = sectionText.replaceAll("(?i)"+text, "<font color='#F97E7E'>"+"$0"+"</font>");
                         viewBinding.menuSectionName.setText(Html.fromHtml(newString));
                     } else {
                         viewBinding.menuSectionName.setText(sectionText);
@@ -117,7 +117,7 @@ public class MenuGroupAdapter extends GroupAdapter {
                             menuItem.callFilterCallBack();
                         }
 
-                        String newString = itemText.replaceAll("(?i)"+text, "<font color='#F5C4C4'>"+"$0"+"</font>");
+                        String newString = itemText.replaceAll("(?i)"+text, "<font color='#F97E7E'>"+"$0"+"</font>");
                         iBinding.menuItemName.setText(Html.fromHtml(newString));
                         Log.d("if block call", "called " + newString);
                     } else {

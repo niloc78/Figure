@@ -153,6 +153,7 @@ public class RecipeFragment extends Fragment {
 
         showRecipe.setOnClickListener(v -> {
             showRecipe.setSelected(!showRecipe.isSelected());
+
             if (showRecipe.isSelected()) {
                 recipeWeb.loadUrl(recipe.getUrl());
                 //TransitionManager.beginDelayedTransition(recipeWeb, new AutoTransition());
@@ -182,6 +183,8 @@ public class RecipeFragment extends Fragment {
         recipeNutritionDivider = (ImageView) view.findViewById(R.id.recipe_nutrition_divider);
 
     }
+
+
 
     public void initNutrition(View view) {
         nutrition = new LinkedHashMap<>();
