@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    
+    <EditText
+        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:id="@+id/edit_profile_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:maxLines="1"
+        android:maxLength="10"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:hint="Name"
+        android:gravity="center"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            app:layout_constraintTop_toTopOf="@id/feetpicker"
+            app:layout_constraintBottom_toBottomOf="@id/feetpicker"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/feetpicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:text="Feet"/>
+        <TextView
+            app:layout_constraintTop_toTopOf="@id/inchpicker"
+            app:layout_constraintBottom_toBottomOf="@id/inchpicker"
+            app:layout_constraintLeft_toRightOf="@id/feetpicker"
+            app:layout_constraintRight_toLeftOf="@id/inchpicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:text="Inches"/>
+
+
+        <NumberPicker
+            android:id="@+id/feetpicker"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/inchpicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <NumberPicker
+            android:id="@+id/inchpicker"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/feetpicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <EditText
+        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:id="@+id/edit_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:maxLines="1"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:maxLength="3"
+        android:hint="Weight(lb)"
+        android:gravity="center"/>
+    <EditText
+        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:id="@+id/edit_goal_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:maxLines="1"
+        android:textSize="16sp"
+        android:maxLength="3"
+        android:textColor="@color/black"
+        android:hint="Goal Weight(lb)"
+        android:gravity="center"/>
+
+
+</LinearLayout>

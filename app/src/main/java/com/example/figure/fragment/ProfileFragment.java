@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -13,12 +14,14 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 
 import com.example.figure.view.NutritionDialog;
+import com.example.figure.view.ProfileStatDialog;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.mikhaellopez.circularimageview.*;
 import android.view.View;
@@ -27,7 +30,13 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.fragment.app.Fragment;
@@ -38,9 +47,11 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 import org.w3c.dom.Text;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Random;
 
-public class ProfileFragment extends Fragment implements NutritionDialog.SetListener {
+public class ProfileFragment extends Fragment implements NutritionDialog.SetListener, ProfileStatDialog.SetProfileStatsListener {
     Context context;
     View _rootView;
     CircularImageView circularImageView;
@@ -86,6 +97,28 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
 
         }
         return _rootView;
+    }
+
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == Activity.RESULT_OK) {
+            try {
+                final Uri imageUri = result.getData().getData();
+                final InputStream imageStream = context.getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                setProfilePic(selectedImage);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(context, "No image selected", Toast.LENGTH_LONG).show();
+        }
+    });
+
+    public void openProfileImageChooserActivity() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        activityResultLauncher.launch(intent);
     }
 
     @Override
@@ -138,22 +171,35 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
         goalProtein = (TextView) view.findViewById(R.id.goal_protein);
 
         calProgressBar.setOnClickListener(v -> {
-            openDialog(0);
+            openNutritionDialog(0);
         });
         fatProgressBar.setOnClickListener(v -> {
-            openDialog(1);
+            openNutritionDialog(1);
         });
         carbProgressBar.setOnClickListener(v -> {
-            openDialog(2);
+            openNutritionDialog(2);
         });
         proteinProgressBar.setOnClickListener(v -> {
-            openDialog(3);
+            openNutritionDialog(3);
         });
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.omelette);
-        circularImageView.setImageBitmap(bitmap);
+        setProfilePic(bitmap);
 
+        editButton.setOnClickListener(v -> {
+            openStatDialog();
+        });
+        circularImageView.setOnClickListener(v -> {
+           openProfileImageChooserActivity();
+        });
 
     }
+
+    void openStatDialog() {
+        ProfileStatDialog dialog = new ProfileStatDialog();
+        dialog.show(getChildFragmentManager(), "stat dialog");
+    }
+
+
     void setProfilePic(Bitmap bitmap) {
         circularImageView.setImageBitmap(bitmap);
 //        ShapeableImageView profileImageView = (ShapeableImageView) view.findViewById(R.id.profile_image);
@@ -164,55 +210,63 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
         return ((BitmapDrawable)circularImageView.getDrawable()).getBitmap();
     }
 
-    private Bitmap resizeProfileImage(Bitmap bitmap) {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-
-        int minwidth = dpToPx(200, context);
-        int minheight = dpToPx(200, context);
-        float scaleWidth = ((float) minwidth)/width;
-        float scaleHeight = ((float) minheight)/height;
-
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
-        bitmap.recycle();
-        Bitmap crop = getCircleCrop(resizedBitmap);
-        return crop;
-
+//    private Bitmap resizeProfileImage(Bitmap bitmap) {
+//        int width = bitmap.getWidth();
+//        int height = bitmap.getHeight();
+//
+//        int minwidth = dpToPx(200, context);
+//        int minheight = dpToPx(200, context);
+//        float scaleWidth = ((float) minwidth)/width;
+//        float scaleHeight = ((float) minheight)/height;
+//
+//        Matrix matrix = new Matrix();
+//        matrix.postScale(scaleWidth, scaleHeight);
+//        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
+//        bitmap.recycle();
+//        Bitmap crop = getCircleCrop(resizedBitmap);
+//        return crop;
+//
+//    }
+//    private Bitmap getCircleCrop(Bitmap bitmap) {
+//        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(output);
+//
+//        final int color = 0xff424242;
+//        final Paint paint = new Paint();
+//        final Rect rect = new Rect(0,0,bitmap.getWidth(), bitmap.getHeight());
+//
+//        paint.setAntiAlias(true);
+//        canvas.drawARGB(0,0,0,0);
+//        paint.setColor(color);
+//        canvas.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, bitmap.getWidth()/2, paint);
+//        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+//        canvas.drawBitmap(bitmap, rect, rect, paint);
+//        return output;
+//    }
+    public void setHeight(String height) {
+        heightView.setText(height);
     }
-    private Bitmap getCircleCrop(Bitmap bitmap) {
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0,0,bitmap.getWidth(), bitmap.getHeight());
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0,0,0,0);
-        paint.setColor(color);
-        canvas.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, bitmap.getWidth()/2, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        return output;
-    }
-
-    void setHeight(int feet, int inches) {
+    public void setHeight(int feet, int inches) {
         heightView.setText(feet + "'" + inches);
     }
-    void setWeight(int pounds) {
-        weightView.setText(pounds);
+    public void setWeight(int pounds) {
+        weightView.setText("" + pounds);
     }
-    void setGoalWeight(int pounds) {
-        goalWeightView.setText(pounds);
+    public void setWeight(String weight) {
+        weightView.setText(weight);
     }
-    void setName(String name) {
+    public void setGoalWeight(String goalWeight) {
+        goalWeightView.setText(goalWeight);
+    }
+    public void setGoalWeight(int pounds) {
+        goalWeightView.setText("" + pounds);
+    }
+    public void setName(String name) {
         this.name.setText(name);
     }
-    void setProfilePic(Bitmap bitmap) {
-        circularImageView.setImageBitmap(bitmap);
-    }
+//    void setProfilePic(Bitmap bitmap) {
+//        circularImageView.setImageBitmap(bitmap);
+//    }
 
     void setGoalCalories(int goalCalories) {
         ValueAnimator animator = ValueAnimator.ofInt(Integer.parseInt(this.goalCalories.getText().toString()), goalCalories);
@@ -342,7 +396,26 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
         return goalProtein.getText().toString();
     }
 
-    void openDialog(int i) {
+    public String getName() {
+        return name.getText().toString();
+    }
+    public String getHeight() {
+        return heightView.getText().toString();
+    }
+    public String getWeight() {
+        return weightView.getText().toString();
+    }
+    public String getGoalWeight() {
+        return goalWeightView.getText().toString();
+    }
+    public int getFeet() {
+        return Integer.parseInt(getHeight().split("'")[0]);
+    }
+    public int getInch() {
+        return Integer.parseInt(getHeight().split("'")[1]);
+    }
+
+    void openNutritionDialog(int i) {
         NutritionDialog dialog = new NutritionDialog(i);
         dialog.show(getChildFragmentManager(), "nutrition dialog");
     }
@@ -368,4 +441,13 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
             setProtein(Integer.parseInt(currVal));
         }
     }
+
+    @Override
+    public void setStats(String name, String height, String weight, String goalWeight) {
+        setName(name);
+        setHeight(height);
+        setWeight(weight);
+        setGoalWeight(goalWeight);
+    }
+
 }

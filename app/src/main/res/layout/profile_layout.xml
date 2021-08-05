@@ -56,8 +56,10 @@
             <TextView
                 android:id="@+id/profile_name"
                 android:maxLines="1"
+                android:maxLength="10"
+                app:layout_constraintWidth_max="160dp"
                 android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="20sp"
+                android:autoSizeMinTextSize="13sp"
                 android:autoSizeMaxTextSize="40sp"
                 android:autoSizeStepGranularity="2sp"
                 android:textSize="40sp"

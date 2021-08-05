@@ -64,6 +64,20 @@ public class LoginActivity extends AppCompatActivity {
 
         Realm.init(this);
         app = new App(new AppConfiguration.Builder(appId).build());
+//        app.currentUser().logOutAsync(r -> {
+//            if (r.isSuccess()) {
+//                Log.d("LOGOUT", "SUCCESS");
+//            } else {
+//                Log.d("LOGOUT", "FAIL");
+//            }
+//        });
+
+        if (app.currentUser() != null && app.currentUser().isLoggedIn()) {
+            //logged in
+            //refresh data and pass to main
+            //set profile
+            startMain();
+        }
 
 //        Log.d("CURR USER", "LOGGED IN: " + app.currentUser().isLoggedIn());
 //        Log.d("CURR USER", "ID: " + app.currentUser().getId());
@@ -86,6 +100,12 @@ public class LoginActivity extends AppCompatActivity {
         callingActivity = getCallingActivity();
 
 
+    }
+
+    void startMain() {
+        Intent i = new Intent(this, MainActivity.class);
+        finish();
+        startActivity(i);
     }
 
     boolean isForResult() {
