@@ -37,6 +37,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.mikhaellopez:circularimageview:4.3.0'
     implementation 'com.xwray:groupie:2.9.0'
     implementation 'com.xwray:groupie-viewbinding:2.8.0'
     implementation 'com.xwray:groupie-kotlin-android-extensions:2.8.0'
