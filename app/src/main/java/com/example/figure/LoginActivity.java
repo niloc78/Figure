@@ -25,6 +25,7 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.card.MaterialCardView;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.w3c.dom.Text;
 
@@ -41,6 +42,8 @@ import io.realm.mongodb.User;
 import io.realm.mongodb.mongo.MongoClient;
 import io.realm.mongodb.mongo.MongoCollection;
 import io.realm.mongodb.mongo.MongoDatabase;
+
+
 
 public class LoginActivity extends AppCompatActivity {
     private static final String appId = "figure-mdlbd";
@@ -64,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Realm.init(this);
         app = new App(new AppConfiguration.Builder(appId).build());
+
 //        app.currentUser().logOutAsync(r -> {
 //            if (r.isSuccess()) {
 //                Log.d("LOGOUT", "SUCCESS");

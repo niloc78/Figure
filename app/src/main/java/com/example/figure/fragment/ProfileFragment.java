@@ -14,12 +14,18 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+
+
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.set;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 
+import com.example.figure.data.ProfileModel;
 import com.example.figure.view.NutritionDialog;
 import com.example.figure.view.ProfileStatDialog;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -44,12 +50,33 @@ import androidx.fragment.app.Fragment;
 import com.example.figure.MainActivity;
 import com.example.figure.R;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.mongodb.BasicDBObject;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.client.model.Aggregates;
 
+import org.bson.BSONObject;
+import org.bson.BsonDocument;
+import org.bson.Document;
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.conversions.Bson;
 import org.w3c.dom.Text;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Random;
+
+import io.realm.RealmDictionary;
+import io.realm.mongodb.App;
+import io.realm.mongodb.AppConfiguration;
+import io.realm.mongodb.User;
+import io.realm.mongodb.mongo.MongoClient;
+import io.realm.mongodb.mongo.MongoCollection;
+import io.realm.mongodb.mongo.MongoDatabase;
 
 public class ProfileFragment extends Fragment implements NutritionDialog.SetListener, ProfileStatDialog.SetProfileStatsListener {
     Context context;
@@ -126,6 +153,7 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
         super.onViewCreated(view, savedInstanceState);
         if (circularImageView == null) {
             initViews(view);
+            upsertProfile();
             //setGoalCalories(2300);
 //            calProgressBar.setOnClickListener(v -> {
 //
@@ -151,24 +179,24 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
 
 
     void initViews(View view) {
-        circularImageView = (CircularImageView) view.findViewById(R.id.profile_image);
-        name = (TextView) view.findViewById(R.id.profile_name);
-        heightView = (TextView) view.findViewById(R.id.profile_height);
-        weightView = (TextView) view.findViewById(R.id.profile_weight);
-        goalWeightView = (TextView) view.findViewById(R.id.profile_goal_weight);
-        editButton = (ImageButton) view.findViewById(R.id.edit_profile_button);
-        calProgressBar = (CircularProgressIndicator) view.findViewById(R.id.calories_progress_bar);
-        fatProgressBar = (CircularProgressIndicator) view.findViewById(R.id.fat_progress_bar);
-        carbProgressBar = (CircularProgressIndicator) view.findViewById(R.id.carbs_progress_bar);
-        proteinProgressBar = (CircularProgressIndicator) view.findViewById(R.id.protein_progress_bar);
-        calories = (TextView) view.findViewById(R.id.calories);
-        fat = (TextView) view.findViewById(R.id.fat);
-        carbs = (TextView) view.findViewById(R.id.carbs);
-        protein = (TextView) view.findViewById(R.id.protein);
-        goalCalories = (TextView) view.findViewById(R.id.goal_calories);
-        goalFat = (TextView) view.findViewById(R.id.goal_fat);
-        goalCarbs = (TextView) view.findViewById(R.id.goal_carbs);
-        goalProtein = (TextView) view.findViewById(R.id.goal_protein);
+        circularImageView = view.findViewById(R.id.profile_image);
+        name = view.findViewById(R.id.profile_name);
+        heightView = view.findViewById(R.id.profile_height);
+        weightView = view.findViewById(R.id.profile_weight);
+        goalWeightView = view.findViewById(R.id.profile_goal_weight);
+        editButton = view.findViewById(R.id.edit_profile_button);
+        calProgressBar = view.findViewById(R.id.calories_progress_bar);
+        fatProgressBar = view.findViewById(R.id.fat_progress_bar);
+        carbProgressBar = view.findViewById(R.id.carbs_progress_bar);
+        proteinProgressBar = view.findViewById(R.id.protein_progress_bar);
+        calories = view.findViewById(R.id.calories);
+        fat = view.findViewById(R.id.fat);
+        carbs = view.findViewById(R.id.carbs);
+        protein = view.findViewById(R.id.protein);
+        goalCalories = view.findViewById(R.id.goal_calories);
+        goalFat = view.findViewById(R.id.goal_fat);
+        goalCarbs = view.findViewById(R.id.goal_carbs);
+        goalProtein = view.findViewById(R.id.goal_protein);
 
         calProgressBar.setOnClickListener(v -> {
             openNutritionDialog(0);
@@ -440,6 +468,54 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
             setGoalProtein(Integer.parseInt(goalVal));
             setProtein(Integer.parseInt(currVal));
         }
+    }
+
+    void upsertProfile() {
+        //test profile
+        ProfileModel profile = new ProfileModel();
+        profile.setCalories(2000);
+        profile.setCarbs(100);
+        profile.setFat(100);
+        profile.setProtein(100);
+        profile.setGoalCalories(2300);
+        profile.setGoalCarbs(300);
+        profile.setGoalFat(300);
+        profile.setGoalProtein(300);
+        profile.setGoalWeight(200);
+        profile.setWeight(150);
+        profile.setName("Colin");
+        HashMap<String, Integer> height = new HashMap<>();
+        height.put("feet", 5);
+        height.put("inch", 11);
+        profile.setHeight(height);
+        BasicDBObject s = new BasicDBObject();
+        s.append("profile", profile);
+
+        App app = new App(new AppConfiguration.Builder("figure-mdlbd").build());
+        User user = app.currentUser();
+        MongoClient client = user.getMongoClient("mongodb-atlas");
+        MongoDatabase mongoDatabase = client.getDatabase("Figure");
+        CodecRegistry registry = fromRegistries(AppConfiguration.DEFAULT_BSON_CODEC_REGISTRY,
+                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+        MongoCollection<Document> users = mongoDatabase.getCollection("Users");
+
+        Document prof = new Document();
+        prof.put("Name", profile.getName());
+        prof.put("calories", profile.getCalories());
+        prof.put("height", profile.getHeight());
+
+        Document doc = new Document("profile", prof);
+
+
+
+        users.findOneAndUpdate(new Document("profile", "uwu"), new Document("$set", prof)).getAsync(result -> {
+            if (result.isSuccess()) {
+                Log.d("UPDATE", "SUCCESS");
+            } else {
+                Log.d("UPDATE", result.getError().toString());
+            }
+        });
+
     }
 
     @Override
