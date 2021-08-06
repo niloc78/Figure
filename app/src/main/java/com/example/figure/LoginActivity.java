@@ -135,6 +135,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+
     boolean isEmailValid(CharSequence email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }

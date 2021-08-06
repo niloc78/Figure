@@ -16,8 +16,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 
 
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Updates.set;
+
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,9 +41,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+
 import androidx.fragment.app.Fragment;
 
 import com.example.figure.MainActivity;
@@ -153,7 +150,7 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
         super.onViewCreated(view, savedInstanceState);
         if (circularImageView == null) {
             initViews(view);
-            upsertProfile();
+            //upsertProfile();
             //setGoalCalories(2300);
 //            calProgressBar.setOnClickListener(v -> {
 //
@@ -238,6 +235,12 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
         return ((BitmapDrawable)circularImageView.getDrawable()).getBitmap();
     }
 
+    Document getProfileDocument() {
+        App app = new App(new AppConfiguration.Builder("figure-mdlbd").build());
+        User user = app.currentUser();
+        return user.getCustomData();
+    }
+
 //    private Bitmap resizeProfileImage(Bitmap bitmap) {
 //        int width = bitmap.getWidth();
 //        int height = bitmap.getHeight();
@@ -297,106 +300,77 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
 //    }
 
     void setGoalCalories(int goalCalories) {
-        ValueAnimator animator = ValueAnimator.ofInt(Integer.parseInt(this.goalCalories.getText().toString()), goalCalories);
-        animator.setDuration(700);
-        animator.addUpdateListener(animation -> {
-            this.goalCalories.setText(animation.getAnimatedValue().toString());
-        });
-        animator.start();
+        getValueAnimator(this.goalCalories, goalCalories, 700).start();
         //this.goalCalories.setText(Integer.toString(goalCalories));
-        this.calProgressBar.setMax(goalCalories);
+        //this.calProgressBar.setMax(goalCalories);
+        animateProgressMax(this.calProgressBar, goalCalories, 700);
     }
     public void setCalories(int cal) {
-        ValueAnimator animator = ValueAnimator.ofInt(Integer.parseInt(calories.getText().toString()), cal);
-        animator.setDuration(700);
-        animator.addUpdateListener(animation -> {
-            calories.setText(animation.getAnimatedValue().toString());
-        });
-        animator.start();
+        getValueAnimator(this.calories, cal, 700).start();
         //calories.setText("" + cal);
         //calProgressBar.setProgress(cal);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            calProgressBar.setProgress(cal, true);
-        } else {
-            ObjectAnimator o = ObjectAnimator.ofInt(calProgressBar, "progress", cal);
-            o.setInterpolator(new AccelerateDecelerateInterpolator());
-            o.setDuration(700).start();
-            //ObjectAnimator.ofInt(calProgressBar, "progress", cal).setDuration(300).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-        }
+        animateProgress(this.calProgressBar, cal, 700);
     }
     void setGoalFat(int goalFat) {
-        ValueAnimator animator = ValueAnimator.ofInt(Integer.parseInt(this.goalFat.getText().toString()), goalFat);
-        animator.setDuration(700);
-        animator.addUpdateListener(animation -> {
-            this.goalFat.setText(animation.getAnimatedValue().toString());
-        });
-        animator.start();
+        getValueAnimator(this.goalFat, goalFat, 700).start();
 
         //this.goalFat.setText("" + goalFat);
-        this.fatProgressBar.setMax(goalFat);
+        //this.fatProgressBar.setMax(goalFat);
+        animateProgressMax(this.fatProgressBar, goalFat, 700);
     }
     void setGoalCarbs(int goalCarbs) {
-        ValueAnimator animator = ValueAnimator.ofInt(Integer.parseInt(this.goalCarbs.getText().toString()), goalCarbs);
-        animator.setDuration(700);
-        animator.addUpdateListener(animation -> {
-            this.goalCarbs.setText(animation.getAnimatedValue().toString());
-        });
-        animator.start();
+        getValueAnimator(this.goalCarbs, goalCarbs, 700).start();
         //this.goalCarbs.setText("" + goalCarbs);
-        this.carbProgressBar.setMax(goalCarbs);
+        //this.carbProgressBar.setMax(goalCarbs);
+        animateProgressMax(this.carbProgressBar, goalCarbs, 700);
     }
     void setGoalProtein(int goalProtein) {
-        ValueAnimator animator = ValueAnimator.ofInt(Integer.parseInt(this.goalProtein.getText().toString()), goalProtein);
-        animator.setDuration(700);
-        animator.addUpdateListener(animation -> {
-            this.goalProtein.setText(animation.getAnimatedValue().toString());
-        });
-        animator.start();
+        getValueAnimator(this.goalProtein, goalProtein, 700).start();
         //this.goalProtein.setText("" + goalProtein);
-        this.proteinProgressBar.setMax(goalProtein);
+        //this.proteinProgressBar.setMax(goalProtein);
+        animateProgressMax(this.proteinProgressBar, goalProtein, 700);
     }
 
     void setFat(int fat) {
-        ValueAnimator animator = ValueAnimator.ofInt(Integer.parseInt(this.fat.getText().toString()), fat);
-        animator.setDuration(700);
-        animator.addUpdateListener(animation -> {
-            this.fat.setText(animation.getAnimatedValue().toString());
-        });
-        animator.start();
+        getValueAnimator(this.fat, fat, 700).start();
         //this.fat.setText("" + fat);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            this.fatProgressBar.setProgress(fat, true);
-        } else {
-            ObjectAnimator.ofInt(this.fatProgressBar, "progress", fat).setDuration(300).start();
-        }
+        animateProgress(this.fatProgressBar, fat, 700);
     }
     void setCarbs(int carbs) {
-        ValueAnimator animator = ValueAnimator.ofInt(Integer.parseInt(this.carbs.getText().toString()), carbs);
-        animator.setDuration(700);
-        animator.addUpdateListener(animation -> {
-            this.carbs.setText(animation.getAnimatedValue().toString());
-        });
-        animator.start();
+        getValueAnimator(this.carbs, carbs, 700).start();
         //this.carbs.setText("" + carbs);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            this.carbProgressBar.setProgress(carbs, true);
-        } else {
-            ObjectAnimator.ofInt(this.carbProgressBar, "progress", carbs).setDuration(300).start();
-        }
+        animateProgress(this.carbProgressBar, carbs, 700);
     }
     void setProtein(int protein) {
-        ValueAnimator animator = ValueAnimator.ofInt(Integer.parseInt(this.protein.getText().toString()), protein);
-        animator.setDuration(700);
-        animator.addUpdateListener(animation -> {
-            this.protein.setText(animation.getAnimatedValue().toString());
-        });
-        animator.start();
-        //this.protein.setText("" + protein);
+        getValueAnimator(this.protein, protein, 700).start();
+        animateProgress(this.proteinProgressBar, protein, 700);
+    }
+
+    void animateProgress(CircularProgressIndicator progressIndicator, int val, int dur) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            this.proteinProgressBar.setProgress(protein, true);
+            progressIndicator.setProgress(val, true);
         } else {
-            ObjectAnimator.ofInt(this.proteinProgressBar, "progress", protein).setDuration(300).start();
+            ObjectAnimator o = ObjectAnimator.ofInt(progressIndicator, "progress", val);
+            o.setInterpolator(new AccelerateDecelerateInterpolator());
+            o.setDuration(dur).start();
         }
+    }
+    void animateProgressMax(CircularProgressIndicator progressIndicator, int max, int dur) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            progressIndicator.setMax(max);
+        } else {
+            ObjectAnimator o = ObjectAnimator.ofInt(progressIndicator, "max", max);
+            o.setInterpolator(new AccelerateDecelerateInterpolator());
+            o.setDuration(dur).start();
+        }
+    }
+
+    ValueAnimator getValueAnimator(TextView textView, int value, int dur) {
+        ValueAnimator animator = ValueAnimator.ofInt(Integer.parseInt(textView.getText().toString()), value).setDuration(dur);
+        animator.addUpdateListener(animation -> {
+            textView.setText(animation.getAnimatedValue().toString());
+        });
+        return animator;
     }
 
     public String getCalories() {
@@ -449,9 +423,9 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
     }
 
 
-    private static int dpToPx(float dp, Context context) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
-    }
+//    private static int dpToPx(float dp, Context context) {
+//        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+//    }
 
     @Override
     public void setValues(String currVal, String goalVal, String mode) {
@@ -470,26 +444,16 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
         }
     }
 
-    void upsertProfile() {
-        //test profile
-        ProfileModel profile = new ProfileModel();
-        profile.setCalories(2000);
-        profile.setCarbs(100);
-        profile.setFat(100);
-        profile.setProtein(100);
-        profile.setGoalCalories(2300);
-        profile.setGoalCarbs(300);
-        profile.setGoalFat(300);
-        profile.setGoalProtein(300);
-        profile.setGoalWeight(200);
-        profile.setWeight(150);
-        profile.setName("Colin");
+    ProfileModel createProfileObject() {
         HashMap<String, Integer> height = new HashMap<>();
-        height.put("feet", 5);
-        height.put("inch", 11);
-        profile.setHeight(height);
-        BasicDBObject s = new BasicDBObject();
-        s.append("profile", profile);
+        height.put("feet", getFeet());
+        height.put("inch", getInch());
+        return new ProfileModel(getName(), Integer.parseInt(getCalories()), Integer.parseInt(getGoalCalories()), Integer.parseInt(getFat()), Integer.parseInt(getGoalFat()),
+                Integer.parseInt(getCarbs()), Integer.parseInt(getGoalCarbs()), Integer.parseInt(getProtein()), Integer.parseInt(getGoalProtein()), Integer.parseInt(getWeight()),
+                Integer.parseInt(getGoalWeight()), height, getProfilePic());
+    }
+
+    void upsertProfile() {
 
         App app = new App(new AppConfiguration.Builder("figure-mdlbd").build());
         User user = app.currentUser();
@@ -497,20 +461,19 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
         MongoDatabase mongoDatabase = client.getDatabase("Figure");
         CodecRegistry registry = fromRegistries(AppConfiguration.DEFAULT_BSON_CODEC_REGISTRY,
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-        MongoCollection<Document> users = mongoDatabase.getCollection("Users");
-
-        Document prof = new Document();
-        prof.put("Name", profile.getName());
-        prof.put("calories", profile.getCalories());
-        prof.put("height", profile.getHeight());
-
-        Document doc = new Document("profile", prof);
+        MongoCollection<ProfileModel> users = mongoDatabase.getCollection("Users", ProfileModel.class).withCodecRegistry(registry);
 
 
-
-        users.findOneAndUpdate(new Document("profile", "uwu"), new Document("$set", prof)).getAsync(result -> {
+        users.findOneAndUpdate(new Document("userid", user.getId()), new Document("$set", createProfileObject().convertToDocument())).getAsync(result -> {
             if (result.isSuccess()) {
                 Log.d("UPDATE", "SUCCESS");
+                user.refreshCustomData(result1 -> {
+                    if (result1.isSuccess()) {
+                        Log.d("REFRESH CUSTOMDATA", "REFRESHED");
+                    } else {
+                        Log.d("REFRESH CUSTOMDATA", "FAILED: " + result1.getError().toString());
+                    }
+                });
             } else {
                 Log.d("UPDATE", result.getError().toString());
             }

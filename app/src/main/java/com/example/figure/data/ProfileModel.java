@@ -1,5 +1,11 @@
 package com.example.figure.data;
 
+import android.graphics.Bitmap;
+import android.util.Base64;
+
+import org.bson.Document;
+
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
 
@@ -17,6 +23,41 @@ public class ProfileModel {
     private HashMap<String, Integer> height;
     private int weight;
     private int goalWeight;
+    private String profilePicBitmap;
+
+
+    public ProfileModel() {
+
+    }
+    public ProfileModel(String name, int calories, int goalCalories,
+                        int fat, int goalFat, int carbs, int goalCarbs, int protein, int goalProtein,
+                        int weight, int goalWeight, HashMap<String, Integer> height, Bitmap profilePicBitmap) {
+        this.name = name;
+        this.calories = calories;
+        this.goalCalories = goalCalories;
+        this.fat = fat;
+        this.goalFat = goalFat;
+        this.carbs = carbs;
+        this.goalCarbs = goalCarbs;
+        this.protein = protein;
+        this.goalProtein = goalProtein;
+        this.weight = weight;
+        this.goalWeight = goalWeight;
+        this.height = height;
+        ByteArrayOutputStream boas = new ByteArrayOutputStream();
+        profilePicBitmap.compress(Bitmap.CompressFormat.PNG,100,boas);
+        byte[] b = boas.toByteArray();
+        this.profilePicBitmap = Base64.encodeToString(b, Base64.DEFAULT);
+
+    }
+
+    public String getProfilePicBitmapString() {
+        return profilePicBitmap;
+    }
+
+    public void setProfilePicBitmapString(String profilePicBitmap) {
+        this.profilePicBitmap = profilePicBitmap;
+    }
 
     public String getName() {
         return name;
@@ -112,12 +153,33 @@ public class ProfileModel {
 //    public void setHeight(RealmMap<String, Integer> height) {
 //        this.height = height;
 //    }
-
+    public Document convertToDocument() {
+        Document height = new Document("feet", getHeight().get("feet"));
+        height.put("inch", getHeight().get("inch"));
+        Document profileContents = new Document("name", getName());
+                 profileContents.put("image_bitmap_string", getProfilePicBitmapString());
+                 profileContents.put("height", height);
+                 profileContents.put("weight", getWeight());
+                 profileContents.put("goal_weight", getGoalWeight());
+                 profileContents.put("calories", getCalories());
+                 profileContents.put("goal_calories", getGoalCalories());
+                 profileContents.put("fat", getFat());
+                 profileContents.put("goal_fat", getGoalFat());
+                 profileContents.put("carbs", getCarbs());
+                 profileContents.put("goal_carbs", getGoalCarbs());
+                 profileContents.put("protein", getProtein());
+                 profileContents.put("goal_protein", getGoalProtein());
+        return new Document("profile", profileContents);
+    }
     public void setProtein(int protein) {
         this.protein = protein;
     }
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+    @Override
+    public String toString() {
+        return convertToDocument().toJson();
     }
 }
