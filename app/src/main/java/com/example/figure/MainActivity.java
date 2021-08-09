@@ -1,36 +1,20 @@
 package com.example.figure;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.example.figure.adapter.MainPagerAdapter;
-import com.example.figure.adapter.ModePagerAdapter;
 import com.example.figure.fragment.MainFragment;
-import com.example.figure.fragment.ProfileFragment;
 import com.example.figure.view.OneDirectionViewPager;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.Arrays;
-
-import io.realm.Realm;
 
 public class MainActivity extends FragmentActivity implements FragmentChangeListener {
     public static OneDirectionViewPager viewPager;
@@ -38,7 +22,7 @@ public class MainActivity extends FragmentActivity implements FragmentChangeList
     public Integer colorTo;
     public ValueAnimator colorAnim;
     public static boolean loggedIn = false;
-    private int EXTERNAL_STORAGE_PERMISSION_CODE = 23;
+    //private int EXTERNAL_STORAGE_PERMISSION_CODE = 23;
     public MainActivity() {
         super(R.layout.activity_main);
     }

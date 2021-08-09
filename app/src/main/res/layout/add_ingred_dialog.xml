@@ -11,6 +11,8 @@
         android:id="@+id/edit_ingredient"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:maxLines="1"
         android:hint="Ingredient (eg. Broccoli)"
         android:backgroundTint="@color/main_pink"
         android:singleLine="true"

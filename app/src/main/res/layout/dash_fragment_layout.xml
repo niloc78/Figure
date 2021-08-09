@@ -1,81 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/dash_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/dash_background">
+<!--        <TextView-->
+<!--            android:id="@+id/figure_logo"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="FIGURE"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            android:fontFamily="@font/josefinsans"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="60sp" />-->
 
-        <TextView
-            android:id="@+id/figure_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="figure"
-            android:fontFamily="@font/segoeuibold"
-            android:textColor="@color/black"
-            android:textSize="60sp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/dash_divider"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/figure_logo"
-            android:layout_marginTop="400dp"/>
-        <Button
+<!--        <ImageView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/dash_divider"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/figure_logo"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent" />-->
+        
+        
+        
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/skip_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Skip"
-            android:clickable="true"
-            android:fontFamily="@font/avenirnextreg"
-            android:textSize="19sp"
-            android:background="?selectableItemBackground"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:textColor="@android:color/black"
-            android:alpha=".5"
-            android:layout_marginRight="7dp"
-            android:layout_marginBottom="7dp"/>
+            android:layout_width="350dp"
+            android:layout_height="58dp"
+            app:cardCornerRadius="6dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="47dp"
+            app:cardBackgroundColor="@color/fabpink">
 
-        <Button
-            android:layout_width="43dp"
-            android:layout_height="43dp"
-            android:foreground="@drawable/profile_button"
-            android:background="?selectableItemBackgroundBorderless"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="10dp"
-            android:layout_alignParentTop="true"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/josefinsans"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:layout_marginTop="3dp"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:text="GET STARTED"/>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+        
+<!--        <Button-->
+<!--            android:id="@+id/skip_button"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Skip"-->
+<!--            android:clickable="true"-->
+<!--            android:fontFamily="@font/avenirnextreg"-->
+<!--            android:textSize="19sp"-->
+<!--            android:background="?selectableItemBackground"-->
+<!--            android:textColor="@android:color/black"-->
+<!--            android:alpha=".5"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            android:layout_marginRight="7dp"-->
+<!--            android:layout_marginBottom="7dp"/>-->
+
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/dash_pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
+            android:layout_height="0dp"
+            android:foregroundGravity="center"
             android:overScrollMode="never"
-            android:foregroundGravity="center"/>
+            app:layout_constraintBottom_toTopOf="@id/skip_button"
+            app:layout_constraintTop_toBottomOf="@id/dash_tab_dots"
+            android:layout_marginBottom="50dp"
+            tools:layout_editor_absoluteX="0dp" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/dash_tab_dots"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="10dp"
             android:background="@null"
             app:tabBackground="@drawable/dash_tab_selector"
             app:tabGravity="center"
             app:tabIndicatorHeight="0dp"/>
 
-    </RelativeLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

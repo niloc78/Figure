@@ -16,6 +16,7 @@ import com.example.figure.data.DashModel;
 import com.example.figure.adapter.DashPagerAdapter;
 import com.example.figure.MainActivity;
 import com.example.figure.R;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class DashFragment extends Fragment {
     List<DashModel> models;
     TabLayout dashDotLayout;
     View _rootView;
-    Button skip;
+    MaterialCardView skip;
 
     @Override
     public void onAttach(Context context) {
@@ -41,7 +42,7 @@ public class DashFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        models = new ArrayList<DashModel>();
+        models = new ArrayList<>();
         dashPagerAdapter = new DashPagerAdapter(models, context);
         setRetainInstance(true);
     }
@@ -68,7 +69,7 @@ public class DashFragment extends Fragment {
 
         models.add(new DashModel(R.drawable.dash_cook_icon));
         models.add(new DashModel(R.drawable.dash_dine_icon));
-        models.add(new DashModel(R.drawable.dash_delivery_icon));
+        //models.add(new DashModel(R.drawable.dash_delivery_icon));
 
 
         dashPager = (ViewPager) v.findViewById(R.id.dash_pager);
@@ -77,13 +78,8 @@ public class DashFragment extends Fragment {
 
         dashDotLayout = (TabLayout) v.findViewById(R.id.dash_tab_dots);
         dashDotLayout.setupWithViewPager(dashPager, true);
-        skip = (Button) v.findViewById(R.id.skip_button);
-        skip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.viewPager.setCurrentItem(1);
-            }
-        });
+        skip = (MaterialCardView) v.findViewById(R.id.skip_button);
+        skip.setOnClickListener(v1 -> MainActivity.viewPager.setCurrentItem(1));
     }
     @Override
     public void onDetach() {
@@ -95,9 +91,9 @@ public class DashFragment extends Fragment {
         return "dashFragment";
     }
 
-    public Button getSkip() {
-        return this.skip;
-    }
+//    public Button getSkip() {
+//        return this.skip;
+//    }
 
 //    public void skip() {
 //        if (mainFrag == null) {

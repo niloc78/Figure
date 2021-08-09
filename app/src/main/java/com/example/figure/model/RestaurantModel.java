@@ -4,14 +4,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.android.volley.VolleyError;
-import com.example.figure.GetUrlContent;
-import com.example.figure.IResult;
 import com.example.figure.data.Restaurant;
 import com.example.figure.data.RestaurantResults;
 import com.google.gson.Gson;
 
-import org.json.JSONObject;
 
 import java.util.Random;
 

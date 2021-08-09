@@ -2,17 +2,12 @@ package com.example.figure.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.core.content.ContextCompat;
-
-import com.example.figure.AddIngredientDialog;
 import com.example.figure.R;
 import com.example.figure.fragment.ProfileFragment;
 
