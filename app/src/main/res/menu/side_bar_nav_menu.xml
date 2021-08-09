@@ -12,10 +12,6 @@
             android:id="@+id/dine_menu_item"
             android:title="Dine"
             android:icon="@drawable/dine_menu_icon_unselected"/>
-        <item
-            android:id="@+id/delivery_menu_item"
-            android:title="Delivery"
-            android:icon="@drawable/delivery_menu_icon_unselected"/>
     </group>
 
 </menu>

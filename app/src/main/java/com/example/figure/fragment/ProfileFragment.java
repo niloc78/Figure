@@ -1,13 +1,16 @@
 package com.example.figure.fragment;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -20,6 +23,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -42,6 +46,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.figure.MainActivity;
@@ -62,14 +67,17 @@ import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.conversions.Bson;
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
 import io.realm.RealmDictionary;
 import io.realm.mongodb.App;
 import io.realm.mongodb.AppConfiguration;
+import io.realm.mongodb.RealmResultTask;
 import io.realm.mongodb.User;
 import io.realm.mongodb.mongo.MongoClient;
 import io.realm.mongodb.mongo.MongoCollection;
@@ -96,10 +104,8 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
     TextView goalFat;
     TextView goalCarbs;
     TextView goalProtein;
+    private int EXTERNAL_STORAGE_PERMISSION_CODE = 23;
 
-    //    public IngredientFragment() {
-//        super(R.layout.ingred_frag_layout);
-//    }
     @Override
     public void onCreate(Bundle savedInstancestate) {
         super.onCreate(savedInstancestate);
@@ -123,13 +129,16 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
         return _rootView;
     }
 
-    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    ActivityResultLauncher<Intent> imageChooseLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
             try {
+//                ActivityCompat.requestPermissions((Activity)context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+//                        EXTERNAL_STORAGE_PERMISSION_CODE);
                 final Uri imageUri = result.getData().getData();
                 final InputStream imageStream = context.getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 setProfilePic(selectedImage);
+                upsertData("image_bitmap_string", bitmapToString(selectedImage));
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -139,28 +148,42 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
         }
     });
 
+
+
+    private ActivityResultLauncher<String> mPermissionResult = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            result -> {
+                if(result) {
+                    openProfileImageChooserActivity();
+                    Log.e("READEXTERNALSTORAGE", "onActivityResult: PERMISSION GRANTED");
+                } else {
+                    Log.e("READEXTERNALSTORAGE", "onActivityResult: PERMISSION DENIED");
+                }
+            });
+
+
+
     public void openProfileImageChooserActivity() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
-        activityResultLauncher.launch(intent);
+        imageChooseLauncher.launch(intent);
     }
+
+
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) { // what happens after onCreateView
         super.onViewCreated(view, savedInstanceState);
         if (circularImageView == null) {
             initViews(view);
+            if (MainActivity.isLoggedIn()) {
+                loadProfile();
+
+            }
+            //loadProfile();
             //upsertProfile();
-            //setGoalCalories(2300);
-//            calProgressBar.setOnClickListener(v -> {
-//
-//                Random rand = new Random();
-//                int cal = rand.nextInt(2300);
-//                setCalories(cal);
-//                //setGoalCalories(cal);
-//            });
         }
-        //setProfilePic(view);
     }
 
     @Override
@@ -214,7 +237,8 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
             openStatDialog();
         });
         circularImageView.setOnClickListener(v -> {
-           openProfileImageChooserActivity();
+            mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+//           openProfileImageChooserActivity();
         });
 
     }
@@ -224,56 +248,108 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
         dialog.show(getChildFragmentManager(), "stat dialog");
     }
 
+    String bitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream boas = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,boas);
+        byte[] b = boas.toByteArray();
+        return Base64.encodeToString(b, Base64.DEFAULT);
+    }
 
     void setProfilePic(Bitmap bitmap) {
         circularImageView.setImageBitmap(bitmap);
-//        ShapeableImageView profileImageView = (ShapeableImageView) view.findViewById(R.id.profile_image);
-//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.omelette);
-//        profileImageView.setImageBitmap(resizeProfileImage(bitmap));
     }
     public Bitmap getProfilePic() {
         return ((BitmapDrawable)circularImageView.getDrawable()).getBitmap();
     }
 
-    Document getProfileDocument() {
-        App app = new App(new AppConfiguration.Builder("figure-mdlbd").build());
-        User user = app.currentUser();
-        return user.getCustomData();
+//    Document getUserDocument() {
+//        App app = new App(new AppConfiguration.Builder("figure-mdlbd").build());
+//        User user = app.currentUser();
+//        MongoClient client = user.getMongoClient("mongodb-atlas");
+//        MongoDatabase mongoDatabase = client.getDatabase("Figure");
+//        MongoCollection<Document> users = mongoDatabase.getCollection("Users");
+//        users.findOne(new Document("userid", user.getId())).getAsync(result -> {
+//            if (result.isSuccess()) {
+//
+//            } else {
+//
+//            }
+//        });
+//        return users.findOne(new Document("userid", user.getId())).get();
+//        //return user.getCustomData();
+//    }
+
+    Document getProfile(Document user) {
+        return (Document) user.get("profile");
+    }
+    String fetchImageBitmapString(Document profile) {
+        return profile.getString("image_bitmap_string");
     }
 
-//    private Bitmap resizeProfileImage(Bitmap bitmap) {
-//        int width = bitmap.getWidth();
-//        int height = bitmap.getHeight();
-//
-//        int minwidth = dpToPx(200, context);
-//        int minheight = dpToPx(200, context);
-//        float scaleWidth = ((float) minwidth)/width;
-//        float scaleHeight = ((float) minheight)/height;
-//
-//        Matrix matrix = new Matrix();
-//        matrix.postScale(scaleWidth, scaleHeight);
-//        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
-//        bitmap.recycle();
-//        Bitmap crop = getCircleCrop(resizedBitmap);
-//        return crop;
-//
-//    }
-//    private Bitmap getCircleCrop(Bitmap bitmap) {
-//        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-//        Canvas canvas = new Canvas(output);
-//
-//        final int color = 0xff424242;
-//        final Paint paint = new Paint();
-//        final Rect rect = new Rect(0,0,bitmap.getWidth(), bitmap.getHeight());
-//
-//        paint.setAntiAlias(true);
-//        canvas.drawARGB(0,0,0,0);
-//        paint.setColor(color);
-//        canvas.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, bitmap.getWidth()/2, paint);
-//        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-//        canvas.drawBitmap(bitmap, rect, rect, paint);
-//        return output;
-//    }
+    Bitmap StringToBitmap(String encodedString) {
+        try {
+            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void loadProfile() {
+        App app = new App(new AppConfiguration.Builder("figure-mdlbd").build());
+        User user = app.currentUser();
+        MongoClient client = user.getMongoClient("mongodb-atlas");
+        MongoDatabase mongoDatabase = client.getDatabase("Figure");
+        MongoCollection<Document> users = mongoDatabase.getCollection("Users");
+
+        users.findOne(new Document("userid", user.getId())).getAsync(result -> {
+            if (result.isSuccess()) {
+                Log.d("FETCH USER", "SUCCESS");
+                Document userDoc = result.get();
+                Document profile = getProfile(userDoc);
+                Document height = (Document) profile.get("height");
+                //profile pic
+                String bitmapstring = fetchImageBitmapString(profile);
+                if (!bitmapstring.isEmpty()) {
+                    Bitmap profilePicBitmap = StringToBitmap(bitmapstring);
+                    setProfilePic(profilePicBitmap);
+                    circularImageView.setBackgroundColor(Color.TRANSPARENT);
+
+                }
+                //name
+                setName(userDoc.getString("name"));
+                //height
+                setHeight(height.getInteger("feet"), height.getInteger("inch"));
+                //weight
+                setWeight(profile.getInteger("weight"));
+                //goalweight
+                setGoalWeight(profile.getInteger("goal_weight"));
+                //goalcalories
+                setGoalCalories(profile.getInteger("goal_calories"));
+                //calories
+                setCalories(profile.getInteger("calories"));
+                //goalfat
+                setGoalFat(profile.getInteger("goal_fat"));
+                //fat
+                setFat(profile.getInteger("fat"));
+                //goalcarbs
+                setGoalCarbs(profile.getInteger("goal_carbs"));
+                //carbs
+                setCarbs(profile.getInteger("carbs"));
+                //goalprotein
+                setGoalProtein(profile.getInteger("goal_protein"));
+                //protein
+                setProtein(profile.getInteger("protein"));
+
+            } else {
+                Log.d("FETCH USER", "FAILED: " + result.getError().toString());
+            }
+        });
+
+    }
+
     public void setHeight(String height) {
         heightView.setText(height);
     }
@@ -295,50 +371,35 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
     public void setName(String name) {
         this.name.setText(name);
     }
-//    void setProfilePic(Bitmap bitmap) {
-//        circularImageView.setImageBitmap(bitmap);
-//    }
 
     void setGoalCalories(int goalCalories) {
         getValueAnimator(this.goalCalories, goalCalories, 700).start();
-        //this.goalCalories.setText(Integer.toString(goalCalories));
-        //this.calProgressBar.setMax(goalCalories);
         animateProgressMax(this.calProgressBar, goalCalories, 700);
     }
     public void setCalories(int cal) {
         getValueAnimator(this.calories, cal, 700).start();
-        //calories.setText("" + cal);
-        //calProgressBar.setProgress(cal);
         animateProgress(this.calProgressBar, cal, 700);
     }
     void setGoalFat(int goalFat) {
         getValueAnimator(this.goalFat, goalFat, 700).start();
 
-        //this.goalFat.setText("" + goalFat);
-        //this.fatProgressBar.setMax(goalFat);
         animateProgressMax(this.fatProgressBar, goalFat, 700);
     }
     void setGoalCarbs(int goalCarbs) {
         getValueAnimator(this.goalCarbs, goalCarbs, 700).start();
-        //this.goalCarbs.setText("" + goalCarbs);
-        //this.carbProgressBar.setMax(goalCarbs);
         animateProgressMax(this.carbProgressBar, goalCarbs, 700);
     }
     void setGoalProtein(int goalProtein) {
         getValueAnimator(this.goalProtein, goalProtein, 700).start();
-        //this.goalProtein.setText("" + goalProtein);
-        //this.proteinProgressBar.setMax(goalProtein);
         animateProgressMax(this.proteinProgressBar, goalProtein, 700);
     }
 
     void setFat(int fat) {
         getValueAnimator(this.fat, fat, 700).start();
-        //this.fat.setText("" + fat);
         animateProgress(this.fatProgressBar, fat, 700);
     }
     void setCarbs(int carbs) {
         getValueAnimator(this.carbs, carbs, 700).start();
-        //this.carbs.setText("" + carbs);
         animateProgress(this.carbProgressBar, carbs, 700);
     }
     void setProtein(int protein) {
@@ -422,25 +483,33 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
         dialog.show(getChildFragmentManager(), "nutrition dialog");
     }
 
-
-//    private static int dpToPx(float dp, Context context) {
-//        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
-//    }
-
     @Override
     public void setValues(String currVal, String goalVal, String mode) {
+        int v = Integer.parseInt(currVal);
+        int gV = Integer.parseInt(goalVal);
         if (mode.equalsIgnoreCase("calories")) {
-            setGoalCalories(Integer.parseInt(goalVal));
-            setCalories(Integer.parseInt(currVal));
+            setGoalCalories(gV);
+            setCalories(v);
+
+            upsertData("calories", v);
+            upsertData("goal_calories", gV);
         } else if (mode.equalsIgnoreCase("fat")) {
-            setGoalFat(Integer.parseInt(goalVal));
-            setFat(Integer.parseInt(currVal));
+            setGoalFat(gV);
+            setFat(v);
+
+            upsertData("fat", v);
+            upsertData("goal_fat", gV);
         } else if (mode.equalsIgnoreCase("carbs")) {
-            setGoalCarbs(Integer.parseInt(goalVal));
-            setCarbs(Integer.parseInt(currVal));
+            setGoalCarbs(gV);
+            setCarbs(v);
+
+            upsertData("carbs", v);
+            upsertData("goal_carbs", gV);
         } else if (mode.equalsIgnoreCase("protein")) {
-            setGoalProtein(Integer.parseInt(goalVal));
-            setProtein(Integer.parseInt(currVal));
+            setGoalProtein(gV);
+            setProtein(v);
+            upsertData("protein", v);
+            upsertData("goal_protein", gV);
         }
     }
 
@@ -453,7 +522,75 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
                 Integer.parseInt(getGoalWeight()), height, getProfilePic());
     }
 
-    void upsertProfile() {
+    void upsertData(String field, String data) {
+        App app = getApp();
+        User user = getUser(app);
+        MongoCollection<Document> users = getCollection(user);
+
+        users.findOneAndUpdate(new Document("userid", user.getId()), new Document("$set", new Document("profile." + field, data))).getAsync(result -> {
+            if (result.isSuccess()) {
+                Log.d("UPSERT " + field, "SUCCESS");
+            } else {
+                Log.d("UPSERT " + field, "FAILED: " + result.getError().toString());
+            }
+        });
+
+    }
+    void upsertData(String field, Document data) {
+        App app = getApp();
+        User user = getUser(app);
+        MongoCollection<Document> users = getCollection(user);
+
+        users.findOneAndUpdate(new Document("userid", user.getId()), new Document("$set", new Document("profile." + field, data))).getAsync(result -> {
+            if (result.isSuccess()) {
+                Log.d("UPSERT " + field, "SUCCESS");
+            } else {
+                Log.d("UPSERT " + field, "FAILED: " + result.getError().toString());
+            }
+        });
+
+    }
+    void upsertData(String field, int data) {
+        App app = getApp();
+        User user = getUser(app);
+        MongoCollection<Document> users = getCollection(user);
+
+        users.findOneAndUpdate(new Document("userid", user.getId()), new Document("$set", new Document("profile." + field, data))).getAsync(result -> {
+            if (result.isSuccess()) {
+                Log.d("UPSERT " + field, "SUCCESS");
+            } else {
+                Log.d("UPSERT " + field, "FAILED: " + result.getError().toString());
+            }
+        });
+
+    }
+
+    void upsertName(String newName) {
+        App app = getApp();
+        User user = getUser(app);
+        MongoCollection<Document> users = getCollection(user);
+
+        users.findOneAndUpdate(new Document("userid", user.getId()), new Document("$set", new Document("name", newName))).getAsync(result -> {
+            if (result.isSuccess()) {
+                Log.d("UPSERT NAME", "SUCCESS");
+            } else {
+                Log.d("UPSERT NAME", "FAILED: " + result.getError().toString());
+            }
+        });
+    }
+
+    private App getApp() {
+        return new App(new AppConfiguration.Builder("figure-mdlbd").build());
+    }
+    private User getUser(App app) {
+        return app.currentUser();
+    }
+    private MongoCollection<Document> getCollection(User user) {
+        return user.getMongoClient("mongodb-atlas").getDatabase("Figure").getCollection("Users");
+    }
+
+
+    public void upsertProfile() {
 
         App app = new App(new AppConfiguration.Builder("figure-mdlbd").build());
         User user = app.currentUser();
@@ -467,13 +604,6 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
         users.findOneAndUpdate(new Document("userid", user.getId()), new Document("$set", createProfileObject().convertToDocument())).getAsync(result -> {
             if (result.isSuccess()) {
                 Log.d("UPDATE", "SUCCESS");
-                user.refreshCustomData(result1 -> {
-                    if (result1.isSuccess()) {
-                        Log.d("REFRESH CUSTOMDATA", "REFRESHED");
-                    } else {
-                        Log.d("REFRESH CUSTOMDATA", "FAILED: " + result1.getError().toString());
-                    }
-                });
             } else {
                 Log.d("UPDATE", result.getError().toString());
             }
@@ -481,12 +611,21 @@ public class ProfileFragment extends Fragment implements NutritionDialog.SetList
 
     }
 
+
+
     @Override
     public void setStats(String name, String height, String weight, String goalWeight) {
         setName(name);
+        upsertName(name);
         setHeight(height);
+        String[] feetInch = height.split("'");
+        Document h = new Document("feet", Integer.parseInt(feetInch[0]));
+        h.put("inch", Integer.parseInt(feetInch[1]));
+        upsertData("height", h);
         setWeight(weight);
+        upsertData("weight", Integer.parseInt(weight));
         setGoalWeight(goalWeight);
+        upsertData("goal_weight", Integer.parseInt(goalWeight));
     }
 
 }

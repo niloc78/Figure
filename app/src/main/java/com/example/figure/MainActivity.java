@@ -1,24 +1,44 @@
 package com.example.figure;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.example.figure.adapter.MainPagerAdapter;
+import com.example.figure.adapter.ModePagerAdapter;
 import com.example.figure.fragment.MainFragment;
+import com.example.figure.fragment.ProfileFragment;
 import com.example.figure.view.OneDirectionViewPager;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.Arrays;
+
+import io.realm.Realm;
 
 public class MainActivity extends FragmentActivity implements FragmentChangeListener {
     public static OneDirectionViewPager viewPager;
     public Integer colorFrom;
     public Integer colorTo;
     public ValueAnimator colorAnim;
+    public static boolean loggedIn = false;
+    private int EXTERNAL_STORAGE_PERMISSION_CODE = 23;
     public MainActivity() {
         super(R.layout.activity_main);
     }
@@ -27,6 +47,10 @@ public class MainActivity extends FragmentActivity implements FragmentChangeList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Realm.init(this);
+        Intent current = getIntent();
+        setLoggedIn(current.getBooleanExtra("logged_in", false));
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.backgroundgray));
@@ -79,7 +103,7 @@ public class MainActivity extends FragmentActivity implements FragmentChangeList
 
                         } else if (MainFragment.modePager.getCurrentItem() == 2) {
                             colorFrom = getWindow().getStatusBarColor();
-                            colorTo = ContextCompat.getColor(MainActivity.this, R.color.delivery_green);
+                            colorTo = ContextCompat.getColor(MainActivity.this, R.color.main_pink);
 
                             colorAnim.setIntValues(colorFrom, colorTo);
                             colorAnim.start();
@@ -97,12 +121,28 @@ public class MainActivity extends FragmentActivity implements FragmentChangeList
                 }
             });
 
+//            if (isLoggedIn()) {
+//                getProfileFrag().loadProfile();
+//                getMainFrag().toggleFooter();
+//            }
+
         }
     }
 
 
-
-
+//    ActivityResultLauncher<Intent> loginLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+//        if (result.getResultCode() == Activity.RESULT_OK) {
+//            setLoggedIn(result.getData().getBooleanExtra("logged_in", false));
+//            getProfileFrag().loadProfile();
+//            getMainFrag().toggleFooter();
+//        } else {
+//            Log.d("loginLauncherResult", "ERROR");
+//            //Toast.makeText(context, "No image selected", Toast.LENGTH_LONG).show();
+//        }
+//    });
+//    public void launchLogin() {
+//        loginLauncher.launch(new Intent(this, LoginActivity.class));
+//    }
     @Override
     public void replaceFragment(Fragment fragment) {
 //        FragmentManager fragmentManager = getSupportFragmentManager();
@@ -116,6 +156,14 @@ public class MainActivity extends FragmentActivity implements FragmentChangeList
 
     }
 
+
+    public static boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public static void setLoggedIn(boolean logged) {
+        loggedIn = logged;
+    }
 
 
     @Override
@@ -141,5 +189,15 @@ public class MainActivity extends FragmentActivity implements FragmentChangeList
         }
 
     }
+
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == EXTERNAL_STORAGE_PERMISSION_CODE) {
+//            if (!Arrays.asList(grantResults).contains(PackageManager.PERMISSION_DENIED)) {
+//                doStuff();
+//            }
+//        }
+//    }
 
 }

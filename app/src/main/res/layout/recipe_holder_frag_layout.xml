@@ -17,13 +17,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/test_remove_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Test Remove"
-                android:layout_toRightOf="@id/swipe_for_recipes"
-                android:layout_marginTop="80dp"/>
+<!--            <Button-->
+<!--                android:id="@+id/test_remove_button"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Test Remove"-->
+<!--                android:layout_toRightOf="@id/swipe_for_recipes"-->
+<!--                android:layout_marginTop="80dp"/>-->
 
             <ImageView
                 android:id="@+id/swipe_for_recipes"

@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -60,14 +61,24 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Realm.init(this);
+        if(isAlreadyLoggedIn()) {
+            loggedIn = true;
+            startMainLoggedIn();
+        }
+
         setContentView(R.layout.user_start);
         initScenes();
         initStartButtons();
         currScene = StartScene.START;
 
-        Realm.init(this);
         app = new App(new AppConfiguration.Builder(appId).build());
 
+        callingActivity = getCallingActivity();
+        //app.currentUser().logOut();
+
+
+        //app.currentUser().logOut();
 //        app.currentUser().logOutAsync(r -> {
 //            if (r.isSuccess()) {
 //                Log.d("LOGOUT", "SUCCESS");
@@ -76,12 +87,12 @@ public class LoginActivity extends AppCompatActivity {
 //            }
 //        });
 
-        if (app.currentUser() != null && app.currentUser().isLoggedIn()) {
-            //logged in
-            //refresh data and pass to main
-            //set profile
-            startMain();
-        }
+//        if (app.currentUser() != null && app.currentUser().isLoggedIn()) {
+//            //logged in
+//            //refresh data and pass to main
+//            //set profile
+//            startMain();
+//        }
 
 //        Log.d("CURR USER", "LOGGED IN: " + app.currentUser().isLoggedIn());
 //        Log.d("CURR USER", "ID: " + app.currentUser().getId());
@@ -101,13 +112,17 @@ public class LoginActivity extends AppCompatActivity {
 //        Log.d("CURR USER", "CUSTOM DATA: " + app.currentUser().getCustomData().toJson());
 //        Log.d("CURR USER", "REFRESH TOKEN: " + app.currentUser().getRefreshToken());
 
-        callingActivity = getCallingActivity();
 
 
     }
+    boolean isAlreadyLoggedIn() {
+        App app = new App(new AppConfiguration.Builder(appId).build());
+        return app.currentUser() != null && app.currentUser().isLoggedIn();
+    }
 
-    void startMain() {
+    void startMainLoggedIn() {
         Intent i = new Intent(this, MainActivity.class);
+        i.putExtra("logged_in", loggedIn);
         finish();
         startActivity(i);
     }
@@ -141,9 +156,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void initStartButtons() {
-        findViewById(R.id.testbutton).setOnClickListener(v -> {
-            testGetUserInfoLogs();
-        });
+//        findViewById(R.id.testbutton).setOnClickListener(v -> {
+//            testGetUserInfoLogs();
+//        });
 
         findViewById(R.id.login_button).setOnClickListener(v -> {
             toLogin();
@@ -162,6 +177,14 @@ public class LoginActivity extends AppCompatActivity {
         onBackPressed();
         return 1;
     }
+
+    void logIn() {
+        Intent i = new Intent();
+        i.putExtra("logged_in", true);
+        setResult(Activity.RESULT_OK, i);
+        finishForResult();
+    }
+
     public int finishWithoutResult() {
         Intent i = new Intent(this, MainActivity.class);
         finish();
@@ -196,8 +219,10 @@ public class LoginActivity extends AppCompatActivity {
                         //start intent main activity
                         if (isForResult()) {
                             //finish and pass result back to mainactivity
+                            logIn();
                         } else {
                             //start main activity with new intent and pass data
+                            startMainLoggedIn();
                         }
 
                     } else {

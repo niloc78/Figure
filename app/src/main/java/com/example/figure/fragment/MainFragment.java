@@ -2,7 +2,9 @@ package com.example.figure.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -21,11 +25,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.figure.LoginActivity;
 import com.example.figure.view.CustomViewPager;
 import com.example.figure.MainActivity;
 import com.example.figure.adapter.ModePagerAdapter;
 import com.example.figure.R;
 import com.google.android.material.navigation.NavigationView;
+
+import io.realm.mongodb.App;
+import io.realm.mongodb.AppConfiguration;
 
 public class MainFragment extends Fragment {
 
@@ -95,9 +103,9 @@ public class MainFragment extends Fragment {
 
     public void initModePager(View view) {
         modePager = (CustomViewPager) view.findViewById(R.id.modePager);
-        final ModePagerAdapter adapter = new ModePagerAdapter(getChildFragmentManager(), 4);
+        final ModePagerAdapter adapter = new ModePagerAdapter(getChildFragmentManager(), 3);
         modePager.setAdapter(adapter);
-        modePager.setOffscreenPageLimit(3);
+        modePager.setOffscreenPageLimit(2);
 
         modePager.setOnTouchListener((v, event) -> true);
         modePager.setOnDragListener((v, event) -> true);
@@ -112,7 +120,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
 
-                currPage = position == 0 ? toCook() : position == 1 ? toDine() : position == 2 ? toDelivery() : toProfile();
+                currPage = position == 0 ? toCook() : position == 1 ? toDine() : toProfile();
 
             }
 
@@ -123,6 +131,32 @@ public class MainFragment extends Fragment {
         });
 
     }
+
+    ActivityResultLauncher<Intent> loginLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == Activity.RESULT_OK) {
+            MainActivity.setLoggedIn(result.getData().getBooleanExtra("logged_in", false));
+
+            sideBar.getMenu().getItem(0).setChecked(false);
+            sideBar.getMenu().getItem(1).setChecked(false);
+            //sideBar.getMenu().getItem(2).setChecked(false);
+            sideBarFooter.getMenu().getItem(0).setChecked(!sideBarFooter.getMenu().getItem(0).isChecked());
+
+            modePager.setCurrentItem(2);
+            ((ModePagerAdapter)modePager.getAdapter()).getProfileFrag().loadProfile();
+            //profileFragment.loadProfile();
+            //getProfileFrag().loadProfile();
+            toggleFooter();
+        } else {
+            Log.d("loginLauncherResult", "ERROR");
+            //Toast.makeText(context, "No image selected", Toast.LENGTH_LONG).show();
+        }
+    });
+
+    public void launchLogin() {
+        loginLauncher.launch(new Intent(context, LoginActivity.class));
+    }
+
+
 
     public int toCook() {
         ((MainActivity)context).colorFrom = ((MainActivity)context).getWindow().getStatusBarColor();
@@ -140,20 +174,20 @@ public class MainFragment extends Fragment {
         ((MainActivity)context).colorAnim.start();
         return 1;
     }
-    public int toDelivery() {
-        ((MainActivity)context).colorFrom = ((MainActivity)context).getWindow().getStatusBarColor();
-        ((MainActivity)context).colorTo = ContextCompat.getColor(context, R.color.delivery_green);
-
-        ((MainActivity)context).colorAnim.setIntValues(((MainActivity)context).colorFrom, ((MainActivity)context).colorTo);
-        ((MainActivity)context).colorAnim.start();
-        return 2;
-    }
+//    public int toDelivery() {
+//        ((MainActivity)context).colorFrom = ((MainActivity)context).getWindow().getStatusBarColor();
+//        ((MainActivity)context).colorTo = ContextCompat.getColor(context, R.color.delivery_green);
+//
+//        ((MainActivity)context).colorAnim.setIntValues(((MainActivity)context).colorFrom, ((MainActivity)context).colorTo);
+//        ((MainActivity)context).colorAnim.start();
+//        return 2;
+//    }
     public int toProfile() {
         ((MainActivity)context).colorFrom = ((MainActivity)context).getWindow().getStatusBarColor();
         ((MainActivity)context).colorTo = ContextCompat.getColor(context, R.color.main_pink);
         ((MainActivity)context).colorAnim.setIntValues(((MainActivity)context).colorFrom, ((MainActivity)context).colorTo);
         ((MainActivity)context).colorAnim.start();
-        return 3;
+        return 2;
     }
 
     @Override
@@ -164,6 +198,47 @@ public class MainFragment extends Fragment {
     @Override
     public String toString () {
         return "mainFragment";
+    }
+
+    MainActivity getMainActivityContext() {
+        return (MainActivity) getContext();
+    }
+
+    void logOut() {
+        App app = new App(new AppConfiguration.Builder("figure-mdlbd").build());
+        app.currentUser().logOutAsync(result -> {
+            if (result.isSuccess()) {
+                MainActivity.setLoggedIn(false);
+                toggleFooter();
+                sideBar.getMenu().getItem(0).setIcon(ContextCompat.getDrawable(context, R.drawable.cook_side_icon_selector_style)).setChecked(true); //default cook
+                modePager.setCurrentItem(0);//move to cook after logout
+                sideBarFooter.getMenu().getItem(0).setChecked(false); // set profile item false
+
+                Log.d("USER LOGOUT", "SUCCESS");
+            } else {
+                Log.d("USER LOGOUT", "FAILED");
+            }
+        });
+    }
+
+    public void toggleFooter() {
+        if (!getMainActivityContext().isLoggedIn()) {
+            sideBarFooter.getMenu().getItem(0).setVisible(false);
+            sideBarFooter.getMenu().getItem(0).setEnabled(false);
+            sideBarFooter.getMenu().getItem(1).setVisible(true);
+            sideBarFooter.getMenu().getItem(1).setEnabled(true);
+
+            sideBarFooter.getMenu().getItem(2).setVisible(false);
+            sideBarFooter.getMenu().getItem(2).setEnabled(false);
+        } else {
+            sideBarFooter.getMenu().getItem(0).setVisible(true);
+            sideBarFooter.getMenu().getItem(0).setEnabled(true);
+            sideBarFooter.getMenu().getItem(1).setVisible(false);
+            sideBarFooter.getMenu().getItem(1).setEnabled(false);
+
+            sideBarFooter.getMenu().getItem(2).setVisible(true);
+            sideBarFooter.getMenu().getItem(2).setEnabled(true);
+        }
     }
 
     public void initSideBar(View view) {
@@ -177,7 +252,7 @@ public class MainFragment extends Fragment {
 
         sideBar.getMenu().getItem(0).setIcon(ContextCompat.getDrawable(context, R.drawable.cook_side_icon_selector_style)).setChecked(true); //default cook
         sideBar.getMenu().getItem(1).setIcon(ContextCompat.getDrawable(context, R.drawable.dine_side_icon_selector_style));
-        sideBar.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(context, R.drawable.delivery_side_icon_selector_style));
+        //sideBar.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(context, R.drawable.delivery_side_icon_selector_style));
         sideBar.setItemIconTintList(null);
         sideBar.setNavigationItemSelectedListener(item -> {
             if (item.isChecked()) {}
@@ -193,9 +268,6 @@ public class MainFragment extends Fragment {
                     case R.id.dine_menu_item:
                         modePager.setCurrentItem(1);
                         return true;
-                    case R.id.delivery_menu_item:
-                        modePager.setCurrentItem(2);
-                        return true;
                     default:
                         return true;
                 }
@@ -205,19 +277,36 @@ public class MainFragment extends Fragment {
         });
 
         //sideBarFooter.getMenu().getItem(1).setIcon(ContextCompat.getDrawable(context, R.drawable.fitness_side_icon_selector_style));
-        sideBarFooter.setItemIconTintList(null);
 
+        sideBarFooter.setItemIconTintList(null);
+        sideBarFooter.getMenu().getItem(1).setCheckable(false);
+        sideBarFooter.getMenu().getItem(2).setCheckable(false);
+        toggleFooter();
         sideBarFooter.setNavigationItemSelectedListener(item -> {
             if (item.isChecked()) {}
             else {
-                sideBar.getMenu().getItem(0).setChecked(false);
-                sideBar.getMenu().getItem(1).setChecked(false);
-                sideBar.getMenu().getItem(2).setChecked(false);
-                item.setChecked(!item.isChecked());
-                modePager.setCurrentItem(3);
+                switch (item.getItemId()) {
+                    case R.id.profile_menu_item:
+                        sideBar.getMenu().getItem(0).setChecked(false);
+                        sideBar.getMenu().getItem(1).setChecked(false);
+                        //sideBar.getMenu().getItem(2).setChecked(false);
+                        item.setChecked(!item.isChecked());
+                        modePager.setCurrentItem(2);
+                        return true;
+                    case R.id.login_menu_item:
+                        launchLogin();
+                        return true;
+                    case R.id.logout_menu_item:
+                        logOut();
+                        return true;
+                    default:
+                        return true;
+                }
+
             }
             return true;
         });
     }
+
 
 }

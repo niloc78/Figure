@@ -46,7 +46,7 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 
-public class DineDeliveryPreferencesFragment extends Fragment {
+public class OrderPreferencesFragment extends Fragment {
 
     Context context;
     View _rootView;
@@ -85,7 +85,7 @@ public class DineDeliveryPreferencesFragment extends Fragment {
         if (_rootView == null) {
             _rootView = inflater.inflate(R.layout.dine_delivery_preferences_layout, container, false);
 
-            mode = getParentFragment() instanceof  DineFragment ? "Dine" : "Delivery";
+            mode = getParentFragment() instanceof OrderFragment ? "Dine" : "Delivery";
 
         }
         return _rootView;
@@ -103,14 +103,14 @@ public class DineDeliveryPreferencesFragment extends Fragment {
 
             if (mode.equalsIgnoreCase("Dine")) {
                 backButton.setOnClickListener(v -> {
-                    ((DineFragment) getParentFragment()).sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    ((OrderFragment) getParentFragment()).sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                     ((MainFragment) getParentFragment().getParentFragment()).mainSideBarIcon.setVisibility(View.VISIBLE);
                 });
             } else if (mode.equalsIgnoreCase("Delivery")) {
-                backButton.setOnClickListener(v -> {
-                    ((DeliveryFragment) getParentFragment()).sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                    ((MainFragment) getParentFragment().getParentFragment()).mainSideBarIcon.setVisibility(View.VISIBLE);
-                });
+//                backButton.setOnClickListener(v -> {
+//                    ((DeliveryFragment) getParentFragment()).sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+//                    ((MainFragment) getParentFragment().getParentFragment()).mainSideBarIcon.setVisibility(View.VISIBLE);
+//                });
             }
 
             mGetUrlContent = new GetUrlContent(constrIResultCallback(), context);
@@ -132,7 +132,7 @@ public class DineDeliveryPreferencesFragment extends Fragment {
                 Log.d("restaurant response", response.toString());
                 restaurantModel.setResponse(response.toString(), getPriceLevel());
                 if (getMode().equalsIgnoreCase("Dine")) {
-                    ((DineFragment) getParentFragment()).initMenuFragment();
+                    ((OrderFragment) getParentFragment()).initMenuFragment();
                 }
             }
 

@@ -41,6 +41,7 @@
                 android:layout_width="171dp"
                 android:layout_height="171dp"
                 android:layout_marginTop="28dp"
+                android:background="@android:color/transparent"
                 app:civ_shadow="true"
                 app:civ_shadow_color="#D1D1D1"
                 app:civ_shadow_radius="4dp"
@@ -52,6 +53,7 @@
                 app:civ_shadow_gravity="bottom"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
 
             <TextView
                 android:id="@+id/profile_name"

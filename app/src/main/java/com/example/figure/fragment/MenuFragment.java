@@ -49,7 +49,6 @@ import com.example.figure.data.MenuItem;
 import com.example.figure.data.MenuSection;
 import com.example.figure.data.Restaurant;
 import com.xwray.groupie.ExpandableGroup;
-import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.Section;
 
 import java.util.ArrayList;
@@ -279,7 +278,7 @@ public class MenuFragment extends Fragment {
         });
 
         ((Button) view.findViewById(R.id.preferences_button)).setOnClickListener( v-> {
-            ((DineFragment) getParentFragment()).getPrefButton().performClick();
+            ((OrderFragment) getParentFragment()).getPrefButton().performClick();
         });
 
     }

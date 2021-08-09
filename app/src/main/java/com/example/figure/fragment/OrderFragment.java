@@ -35,7 +35,7 @@ import com.google.android.material.card.MaterialCardView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DineFragment extends Fragment {
+public class OrderFragment extends Fragment {
     Context context;
     View _rootView;
     Button prefButton;
@@ -46,9 +46,6 @@ public class DineFragment extends Fragment {
     public static final String places_key = BuildConfig.PLACES_API_KEY;
     public BottomSheetBehavior sheetBehavior;
 
-    //    public IngredientFragment() {
-//        super(R.layout.ingred_frag_layout);
-//    }
     @Override
     public void onCreate(Bundle savedInstancestate) {
         super.onCreate(savedInstancestate);
@@ -111,10 +108,6 @@ public class DineFragment extends Fragment {
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.replace(R.id.menu_container, new MenuFragment(restaurant), "menuFrag");
         transaction.commit();
-
-
-       // MenuFragment menuFrag = ((MenuFragment) getChildFragmentManager().findFragmentById(R.id.menu_container));
-//        menuFrag.setRestaurant(restaurant);
 
     }
 
@@ -230,7 +223,7 @@ public class DineFragment extends Fragment {
     public void initDinePref(View view) {
         FragmentManager fm = getChildFragmentManager();
         FragmentTransaction trans = fm.beginTransaction();
-        trans.add(R.id.dine_pref_container, new DineDeliveryPreferencesFragment(), "dinePreferencesFragment");
+        trans.add(R.id.dine_pref_container, new OrderPreferencesFragment(), "dinePreferencesFragment");
         trans.commit();
 
         sheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.dine_pref_view));

@@ -64,9 +64,9 @@ public class RecipeHolderFragment extends Fragment {
                 tabLayout = view.findViewById(R.id.recipe_tabs);
                 recipePager = (ViewPager2) view.findViewById(R.id.recipe_pager);
 
-                ((Button)view.findViewById(R.id.test_remove_button)).setOnClickListener(v -> {
-                    adapter.clearFragments();
-                });
+//                ((Button)view.findViewById(R.id.test_remove_button)).setOnClickListener(v -> {
+//                    adapter.clearFragments();
+//                });
             }
 
             getParentFragmentManager().setFragmentResultListener("recipesLoaded", this, (requestKey, result) -> {
