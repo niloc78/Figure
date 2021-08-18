@@ -153,6 +153,7 @@ public class MenuFragment extends Fragment {
             dialogView.post(revealAnimationRunnable);
         });
 
+
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogCard = dialogView.findViewById(R.id.dialogcard);
 

@@ -7,7 +7,7 @@ import android.widget.RadioGroup;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatRadioButton;
 
-public class CustomRadioGroup  extends AppCompatRadioButton {
+public class  CustomRadioGroup  extends AppCompatRadioButton {
     public CustomRadioGroup(Context context) {
         super(context);
     }
